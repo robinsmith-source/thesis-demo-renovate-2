@@ -6,12 +6,12 @@ generator client {
 }
 
 datasource db {
-    provider = "sqlite"
+    provider = "postgresql"
     // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below
     // Further reading:
     // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
     // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
-    url      = env("DATABASE_URL")
+    url      = env("DATABASE_PRISMA_URL")
 }
 
 model Post {
@@ -54,14 +54,17 @@ model Session {
 }
 
 model User {
-    id            String    @id @default(cuid())
+    id            String         @id @default(cuid())
     name          String?
-    email         String?   @unique
+    email         String?        @unique
     emailVerified DateTime?
     image         String?
     accounts      Account[]
     sessions      Session[]
-    posts         Post[]
+    recipes       Recipe[]       @relation("RecipeAuthor")
+    savedRecipes  Recipe[]       @relation("RecipeSaved")
+    reviews       RecipeReview[]
+    Post          Post[]
 }
 
 model VerificationToken {
@@ -71,3 +74,89 @@ model VerificationToken {
 
     @@unique([identifier, token])
 }
+
+model RecipeLabelCategory {
+    id          String        @id @default(cuid())
+    name        String
+    RecipeLabel RecipeLabel[]
+}
+
+model RecipeLabel {
+    id         String              @id @default(cuid())
+    name       String
+    category   RecipeLabelCategory @relation(fields: [categoryId], references: [id])
+    categoryId String
+    Recipe     Recipe?             @relation(fields: [recipeId], references: [id])
+    recipeId   String?
+}
+
+enum RecipeDifficulty {
+    EASY
+    MEDIUM
+    HARD
+    EXPERT
+}
+
+model Recipe {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    name             String
+    description      String?
+    requiredUtensils String?
+    difficulty       RecipeDifficulty
+    steps            RecipeStep[]
+    labels           RecipeLabel[]
+    reviews          RecipeReview[]
+    tags             String[]
+
+    author     User   @relation("RecipeAuthor", fields: [authorId], references: [id])
+    authorId   String
+    savedUsers User[] @relation("RecipeSaved")
+
+    @@index([name])
+}
+
+enum RecipeStepType {
+    PREP
+    COOK
+    REST
+}
+
+model RecipeStep {
+    id          String         @id @default(cuid())
+    createdAt   DateTime       @default(now())
+    updatedAt   DateTime       @updatedAt
+    description String
+    duration    Int
+    stepType    RecipeStepType
+
+    recipe      Recipe                 @relation(fields: [recipeId], references: [id])
+    recipeId    String
+    ingredients RecipeStepIngredient[]
+}
+
+model RecipeStepIngredient {
+    id           String     @id @default(cuid())
+    name         String
+    quantity     Float
+    unit         String?
+    recipeStep   RecipeStep @relation(fields: [recipeStepId], references: [id])
+    recipeStepId String
+}
+
+model RecipeReview {
+    id       String  @id @default(cuid())
+    rating   Int // 1-5
+    comment  String?
+    recipe   Recipe  @relation(fields: [recipeId], references: [id])
+    recipeId String
+    author   User    @relation(fields: [authorId], references: [id])
+    authorId String
+
+    // limit that user can only review once
+    @@unique([recipeId, authorId])
+}
+
+// TODO: Shopping list and weekly planner
