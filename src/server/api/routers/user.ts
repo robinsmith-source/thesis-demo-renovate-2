@@ -13,21 +13,7 @@ export const userRouter = createTRPCRouter({
       return ctx.db.user.findFirst({
         where: { id: input.id },
         include: {
-          recipes: {
-            include: {
-              steps: {
-                include: {
-                  ingredients: true,
-                },
-              },
-              reviews: {
-                include: {
-                  author: true,
-                },
-              },
-              labels: true,
-            },
-          },
+          recipes: true,
         },
       });
     }),
