@@ -110,6 +110,8 @@ enum RecipeStepType {
     PREP
     COOK
     REST
+    SEASON
+    SERVE
 }
 
 model RecipeStep {
