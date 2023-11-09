@@ -68,7 +68,7 @@ async function main() {
                 {
                   description:
                     "In a bowl, whisk the eggs, add the grated Parmesan, and mix well. Season with salt and pepper.",
-                  stepType: "PREP",
+                  stepType: "MIX",
                   duration: 3,
                   ingredients: {
                     create: [
@@ -97,7 +97,7 @@ async function main() {
                 {
                   description:
                     "Add the hot, drained spaghetti to the skillet with the bacon and mix.",
-                  stepType: "PREP",
+                  stepType: "MIX",
                   duration: 2,
                 },
                 {
@@ -128,7 +128,7 @@ async function main() {
                 {
                   description:
                     "Serve and garnish with additional Parmesan if desired.",
-                  stepType: "PREP",
+                  stepType: "SERVE",
                   duration: 1,
                   ingredients: {
                     create: {
@@ -232,7 +232,7 @@ async function main() {
                 },
                 {
                   description: "Serve the grilled chicken salad and enjoy.",
-                  stepType: "PREP",
+                  stepType: "SERVE",
                   duration: 1,
                 },
               ],
@@ -349,7 +349,7 @@ async function main() {
                 {
                   description:
                     "Serve the pasta primavera with a sprinkle of extra Parmesan and fresh basil leaves.",
-                  stepType: "PREP",
+                  stepType: "SERVE",
                   duration: 1,
                 },
               ],
@@ -481,7 +481,7 @@ async function main() {
                 {
                   description:
                     "Serve the classic beef stew hot, garnished with fresh parsley.",
-                  stepType: "PREP",
+                  stepType: "SERVE",
                   duration: 1,
                 },
               ],
@@ -548,7 +548,7 @@ async function main() {
                 {
                   description:
                     "Toss the cooked spaghetti in the skillet with the garlic and oil mixture. Season with salt and pepper. Serve hot, garnished with chopped parsley.",
-                  stepType: "PREP",
+                  stepType: "SEASON",
                   duration: 2,
                   ingredients: {
                     create: [
@@ -653,7 +653,7 @@ async function main() {
                 {
                   description:
                     "Slice the homemade Margherita pizza and serve hot.",
-                  stepType: "PREP",
+                  stepType: "SERVE",
                   duration: 1,
                 },
               ],
