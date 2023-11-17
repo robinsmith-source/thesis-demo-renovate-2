@@ -1,8 +1,18 @@
 "use client";
 import { Button, CardBody, CardHeader } from "@nextui-org/react";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 export default function Page() {
+  const { status } = useSession();
+
+  const handleSignOut = async () => {
+    try {
+      await signOut({ callbackUrl: "/" });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <CardHeader className="flex flex-col content-center items-center justify-center gap-3">
@@ -18,7 +28,8 @@ export default function Page() {
           color="danger"
           size="lg"
           className="w-full"
-          onClick={() => signOut()}
+          isLoading={status === "loading"}
+          onClick={() => handleSignOut()}
         >
           Sign out
         </Button>

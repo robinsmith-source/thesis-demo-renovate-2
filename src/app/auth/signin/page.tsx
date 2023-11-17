@@ -2,13 +2,11 @@
 import type { ClientSafeProvider, LiteralUnion } from "next-auth/react";
 import { getProviders, signIn, useSession } from "next-auth/react";
 import type { BuiltInProviderType } from "next-auth/providers";
-import { useEffect, useState } from "react";
 import { Button, CardBody, CardHeader } from "@nextui-org/react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function SignIn() {
-  const { data: session } = useSession();
-  const router = useRouter();
+  const { status } = useSession();
 
   const [providers, setProviders] = useState<Record<
     LiteralUnion<BuiltInProviderType, string>,
@@ -22,12 +20,6 @@ export default function SignIn() {
       console.log(error);
     });
   }, []);
-
-  useEffect(() => {
-    if (session) {
-      router.push("/");
-    }
-  }, [session, router]);
 
   return (
     <>
@@ -44,7 +36,8 @@ export default function SignIn() {
               color="success"
               size="lg"
               className="w-full"
-              onClick={() => signIn(provider.id)}
+              isLoading={status === "loading"}
+              onClick={() => signIn(provider.id, { callbackUrl: "/" })}
             >
               Sign in with {provider.name}
             </Button>
