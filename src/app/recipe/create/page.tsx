@@ -1,7 +1,7 @@
 "use client";
 import { Button, Input, Select, SelectItem, Textarea } from "@nextui-org/react";
-import type { RecipeDifficulty, Recipe } from "@prisma/client";
-import { Controller, useForm } from "react-hook-form";
+import type { Recipe, RecipeDifficulty } from "@prisma/client";
+import { Controller, FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 
@@ -26,15 +26,24 @@ export default function Page() {
       }),
   });
 
-  const { register, handleSubmit, control, reset, getValues } = useForm<Recipe>(
-    {
-      resolver: zodResolver(schema),
+  const methods = useForm<Recipe>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      name: "",
+      description: "",
+      difficulty: "EASY",
+      tags: [],
     },
-  );
+  });
 
   const mutation = api.recipe.create.useMutation({
     onSuccess: () => {
-      reset();
+      methods.reset({
+        name: "",
+        description: "",
+        difficulty: "EASY",
+        tags: [],
+      });
     },
   });
 
@@ -50,67 +59,70 @@ export default function Page() {
 
   return (
     <>
-      <form>
-        <div className="flex gap-4">
+      <FormProvider {...methods}>
+        <form>
+          <div className="flex gap-4">
+            <Controller
+              control={methods.control}
+              name="name"
+              render={({ fieldState }) => (
+                <Input
+                  isRequired
+                  autoFocus
+                  label="Name"
+                  description="Enter recipe name"
+                  variant="bordered"
+                  {...methods.register("name", { required: true })}
+                  isInvalid={!!fieldState.error}
+                  errorMessage={fieldState.error?.message}
+                />
+              )}
+            />
+
+            <Controller
+              control={methods.control}
+              name="difficulty"
+              render={({ field, fieldState }) => (
+                <Select
+                  isRequired
+                  label="Difficulty"
+                  description="Select recipe difficulty"
+                  variant="bordered"
+                  {...methods.register("difficulty", { required: true })}
+                  isInvalid={!!fieldState.error}
+                  errorMessage={fieldState.error?.message}
+                  selectedKeys={[field.value]}
+                >
+                  {["EASY", "MEDIUM", "HARD", "EXPERT"].map((difficulty) => (
+                    <SelectItem
+                      key={difficulty}
+                      value={difficulty as RecipeDifficulty | ""}
+                    >
+                      {difficulty}
+                    </SelectItem>
+                  ))}
+                </Select>
+              )}
+            />
+          </div>
+
           <Controller
-            control={control}
-            name="name"
-            render={({ field, fieldState }) => (
-              <Input
-                autoFocus
-                isRequired
-                label="Name"
-                description="Enter recipe name"
+            control={methods.control}
+            name="description"
+            render={({ fieldState }) => (
+              <Textarea
+                minRows={2}
+                label="Description"
+                description="Enter recipe description"
                 variant="bordered"
-                {...field}
+                {...methods.register("description", { required: false })}
                 isInvalid={!!fieldState.error}
                 errorMessage={fieldState.error?.message}
               />
             )}
           />
 
-          <Controller
-            control={control}
-            name="difficulty"
-            render={({ field, fieldState }) => (
-              <Select
-                label="Difficulty"
-                description="Select recipe difficulty"
-                variant="bordered"
-                {...field}
-                isInvalid={!!fieldState.error}
-                errorMessage={fieldState.error?.message}
-              >
-                {["EASY", "MEDIUM", "HARD", "EXPERT"].map((difficulty) => (
-                  <SelectItem
-                    key={difficulty}
-                    value={difficulty as RecipeDifficulty}
-                  >
-                    {difficulty}
-                  </SelectItem>
-                ))}
-              </Select>
-            )}
-          />
-        </div>
-
-        <Controller
-          control={control}
-          name="description"
-          render={({ fieldState }) => (
-            <Textarea
-              minRows={2}
-              label="Description"
-              description="Enter recipe description"
-              variant="bordered"
-              {...register("description", { required: false })}
-              isInvalid={!!fieldState.error}
-              errorMessage={fieldState.error?.message}
-            />
-          )}
-        />
-
-        {/* <Controller
+          {/* <Controller
           control={control}
           name="tags"
           render={({ field, fieldState }) => (
@@ -126,23 +138,17 @@ export default function Page() {
             </div>
           )}
         />*/}
+          <Controller
+            control={methods.control}
+            name="tags"
+            render={() => <TagInput />}
+          />
 
-        <Controller
-          control={control}
-          name="tags"
-          render={() => (
-            <TagInput
-              control={control}
-              register={register}
-              getValues={getValues}
-            />
-          )}
-        />
-
-        <Button color="primary" onClick={handleSubmit(onSubmit)}>
-          Submit
-        </Button>
-      </form>
+          <Button color="primary" onClick={methods.handleSubmit(onSubmit)}>
+            Submit
+          </Button>
+        </form>
+      </FormProvider>
     </>
   );
 }

@@ -1,34 +1,20 @@
 import { Chip, Input } from "@nextui-org/react";
-import { useState } from "react";
-import {
-  Control,
-  useFieldArray,
-  UseFormGetValues,
-  UseFormRegister,
-} from "react-hook-form";
-import { Recipe } from "@prisma/client";
+import React, { useState } from "react";
+import { useFieldArray, useFormContext } from "react-hook-form";
 
-interface TagInputProps {
-  control: Control<Recipe>;
-  register: UseFormRegister<Recipe>;
-  getValues: UseFormGetValues<Recipe>;
-}
-export default function TagInput({
-  control,
-  register,
-  getValues,
-}: TagInputProps) {
+export default function TagInput() {
+  const methods = useFormContext();
+
   const { fields, append, remove } = useFieldArray({
-    control,
+    control: methods.control,
     name: "tags",
   });
+  const fieldState = methods.getFieldState("tags");
 
   const [inputValue, setInputValue] = useState<string>("");
-
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
   };
-
   const handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter" || event.key === " " || event.key === ",") {
       event.preventDefault();
@@ -36,9 +22,10 @@ export default function TagInput({
     }
   };
 
-  const addTag = () => {
+  const addTag = async () => {
     if (inputValue.trim() !== "") {
       append(inputValue.trim());
+      await methods.trigger("tags");
       setInputValue("");
     }
   };
@@ -47,6 +34,7 @@ export default function TagInput({
     remove(tagToRemove);
   };
 
+  console.log(fieldState);
   return (
     <>
       <Input
@@ -55,6 +43,9 @@ export default function TagInput({
         value={inputValue}
         onChange={handleInputChange}
         onKeyDown={handleInputKeyDown}
+        isInvalid={!!fieldState?.invalid}
+        errorMessage={fieldState?.error?.message}
+        variant="bordered"
       />
       <div className="flex gap-2">
         {fields.map((field, index) => (
@@ -63,9 +54,9 @@ export default function TagInput({
             onClose={() => handleClose(index)}
             color="secondary"
             variant="faded"
-            {...register(`tags.${index}`)}
+            {...methods.register(`tags.${index}`)}
           >
-            {getValues(`tags.${index}`)}
+            {methods.getValues(`tags.${index}`)}
           </Chip>
         ))}
       </div>
