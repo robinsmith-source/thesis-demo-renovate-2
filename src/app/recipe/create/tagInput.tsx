@@ -56,7 +56,7 @@ export default function TagInput() {
         errorMessage={errorMessage}
         variant="bordered"
         startContent={
-          fields.length > 0 ? (
+          fields && (
             <div className="flex items-center gap-2">
               {fields.map((field, index) => (
                 <Chip
@@ -70,7 +70,7 @@ export default function TagInput() {
                 </Chip>
               ))}
             </div>
-          ) : null
+          )
         }
         placeholder={
           fields.length === 0 ? "Enter tags, separated by comma" : ""
