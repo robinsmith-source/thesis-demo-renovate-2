@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 
 import TagInput from "./tagInput";
+import StepCreator from "./StepCreator";
 import { api } from "~/trpc/react";
 
 export default function Page() {
@@ -23,6 +24,20 @@ export default function Page() {
       .refine((items) => new Set(items).size === items.length, {
         message: "Must be an array of unique strings",
       }),
+    steps: z.array(
+      z.object({
+        description: z.string(),
+        duration: z.number().min(0),
+        stepType: z.enum(["PREP", "COOK", "REST"]),
+        ingredients: z.array(
+          z.object({
+            name: z.string().min(1),
+            quantity: z.number().min(1),
+            unit: z.string().optional(),
+          }),
+        ),
+      }),
+    ),
   });
 
   const methods = useForm<Recipe>({
@@ -126,6 +141,12 @@ export default function Page() {
             control={methods.control}
             name="tags"
             render={() => <TagInput />}
+          />
+
+          <Controller
+            control={methods.control}
+            name="steps"
+            render={() => <StepCreator />}
           />
 
           <Button color="primary" onClick={methods.handleSubmit(onSubmit)}>
