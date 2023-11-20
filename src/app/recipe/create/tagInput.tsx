@@ -1,8 +1,6 @@
 import { Chip, Input } from "@nextui-org/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
-
-import { useEffect } from "react";
 
 export default function TagInput() {
   const methods = useFormContext();

@@ -1,7 +1,7 @@
 import React from "react";
-import { useFieldArray, useFormContext } from "react-hook-form";
-import { Input, Select, Button, SelectItem, Textarea } from "@nextui-org/react";
-import type { RecipeStepType } from "@prisma/client";
+import { Controller, useFieldArray, useFormContext } from "react-hook-form";
+import { Button, Input, Select, SelectItem, Textarea } from "@nextui-org/react";
+import { RecipeStepType } from "@prisma/client";
 
 const StepCreator: React.FC = () => {
   const { control, register } = useFormContext();
@@ -15,33 +15,57 @@ const StepCreator: React.FC = () => {
     <>
       {fields.map((step, index) => (
         <div key={step.id}>
-          <Textarea
-            {...register(`steps.${index}.description`)}
-            label="Description"
-          />
-          <Input
-            {...register(`steps.${index}.duration`)}
-            label="Duration"
-            type="number"
-          />
-          <Select
-            isRequired
-            label="Step Type"
-            variant="bordered"
-            {...register(`steps.${index}.stepType`, { required: true })}
-            selectedKeys={[step.value]}
-          >
-            {["PREP", "COOK", "REST", "SEASON", "SERVE", "MIX"].map(
-              (difficulty) => (
-                <SelectItem
-                  key={difficulty}
-                  value={difficulty as RecipeStepType}
-                >
-                  {difficulty}
-                </SelectItem>
-              ),
+          <Controller
+            control={control}
+            name={`steps.${index}.description`}
+            render={({ fieldState }) => (
+              <Textarea
+                {...register(`steps.${index}.description`)}
+                label="Description"
+              />
             )}
-          </Select>
+          />
+
+          <Controller
+            control={control}
+            name={`steps.${index}.duration`}
+            render={({ fieldState }) => (
+              <Input
+                {...register(`steps.${index}.duration`)}
+                label="Duration"
+                type="number"
+              />
+            )}
+          />
+
+          <Controller
+            control={control}
+            name={`steps.${index}.stepType`}
+            render={({ field, fieldState }) => (
+              <Select
+                isRequired
+                label="StepType"
+                description="Select step type"
+                variant="bordered"
+                {...register(`steps.${index}.stepType`, { required: true })}
+                /* isInvalid={!!fieldState.error}
+                                                                                errorMessage={fieldState.error?.message} */
+                selectedKeys={[field.value]}
+                defaultSelectedKeys={["PREP"]}
+              >
+                {["PREP", "COOK", "REST", "SEASON", "SERVE", "MIX"].map(
+                  (stepType) => (
+                    <SelectItem
+                      key={stepType}
+                      value={stepType as RecipeStepType}
+                    >
+                      {stepType as RecipeStepType}
+                    </SelectItem>
+                  ),
+                )}
+              </Select>
+            )}
+          />
           <Button type="button" onClick={() => remove(index)}>
             Remove Step
           </Button>

@@ -83,7 +83,7 @@ export const recipeRouter = createTRPCRouter({
         tags: z
           .array(
             z
-              .string({invalid_type_error: "Tags must be strings"})
+              .string({ invalid_type_error: "Tags must be strings" })
               .min(1)
               .regex(/^[a-z]+$/, "Tags can only contain lowercase characters"),
           )
@@ -95,12 +95,19 @@ export const recipeRouter = createTRPCRouter({
           z.object({
             description: z.string(),
             duration: z.number().min(0),
-            stepType: z.enum(["PREP", "COOK", "REST"]),
+            stepType: z.enum([
+              "PREP",
+              "COOK",
+              "REST",
+              "SEASON",
+              "SERVE",
+              "MIX",
+            ]),
             ingredients: z.array(
               z.object({
                 name: z.string().min(1),
                 quantity: z.number().min(1),
-                unit: z.string().optional(),
+                unit: z.string().nullable(),
               }),
             ),
           }),

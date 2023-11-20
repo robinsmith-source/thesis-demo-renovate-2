@@ -1,6 +1,11 @@
 "use client";
 import { Button, Input, Select, SelectItem, Textarea } from "@nextui-org/react";
-import type { Recipe, RecipeDifficulty } from "@prisma/client";
+import type {
+  Recipe,
+  RecipeDifficulty,
+  RecipeStep,
+  RecipeStepIngredient,
+} from "@prisma/client";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -10,6 +15,12 @@ import StepCreator from "./StepCreator";
 import { api } from "~/trpc/react";
 
 export default function Page() {
+  type RecipeForm = Recipe & {
+    steps: (RecipeStep & {
+      ingredients: RecipeStepIngredient[];
+    })[];
+  };
+
   const schema = z.object({
     name: z.string().min(3, "Names must be at least 3 characters long"),
     description: z.string().nullable(),
@@ -26,9 +37,9 @@ export default function Page() {
       }),
     steps: z.array(
       z.object({
-        description: z.string(),
+        description: z.string().min(3),
         duration: z.number().min(0),
-        stepType: z.enum(["PREP", "COOK", "REST"]),
+        stepType: z.enum(["PREP", "COOK", "REST", "SEASON", "SERVE", "MIX"]),
         ingredients: z.array(
           z.object({
             name: z.string().min(1),
@@ -40,7 +51,7 @@ export default function Page() {
     ),
   });
 
-  const methods = useForm<Recipe>({
+  const methods = useForm<RecipeForm>({
     mode: "onTouched",
     resolver: zodResolver(schema),
     defaultValues: {
@@ -48,6 +59,7 @@ export default function Page() {
       description: "",
       difficulty: "EASY",
       tags: [],
+      steps: [],
     },
   });
 
@@ -58,20 +70,30 @@ export default function Page() {
         description: "",
         difficulty: "EASY",
         tags: [],
+        steps: [{ description: "", duration: 0, stepType: "PREP" }],
       });
     },
   });
 
-  const onSubmit = (data: Recipe) => {
+  const onSubmit = (data: RecipeForm) => {
     mutation.mutate({
       name: data.name,
       description: data.description,
       difficulty: data.difficulty,
-      steps: [],
       tags: data.tags,
+      steps: data.steps.map((step) => ({
+        description: step.description,
+        duration: step.duration,
+        stepType: step.stepType,
+        ingredients: step.ingredients.map((ingredient) => ({
+          name: ingredient.name,
+          quantity: ingredient.quantity,
+          unit: ingredient.unit,
+        })),
+      })),
     });
   };
-
+  console.log(methods.watch());
   return (
     <>
       <FormProvider {...methods}>
@@ -143,11 +165,7 @@ export default function Page() {
             render={() => <TagInput />}
           />
 
-          <Controller
-            control={methods.control}
-            name="steps"
-            render={() => <StepCreator />}
-          />
+          <StepCreator />
 
           <Button color="primary" onClick={methods.handleSubmit(onSubmit)}>
             Submit
