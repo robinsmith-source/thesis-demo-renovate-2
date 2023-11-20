@@ -1,13 +1,12 @@
 "use client";
 import { Button, Input, Select, SelectItem, Textarea } from "@nextui-org/react";
-import type { RecipeDifficulty, Recipe } from "@prisma/client";
-import { Controller, useForm } from "react-hook-form";
+import type { Recipe, RecipeDifficulty } from "@prisma/client";
+import { Controller, FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 
-import TagInput from "rsuite/TagInput";
+import TagInput from "./tagInput";
 import { api } from "~/trpc/react";
-import "rsuite/dist/rsuite-no-reset.min.css";
 
 export default function Page() {
   const schema = z.object({
@@ -26,13 +25,25 @@ export default function Page() {
       }),
   });
 
-  const { register, handleSubmit, control, reset } = useForm<Recipe>({
+  const methods = useForm<Recipe>({
+    mode: "onTouched",
     resolver: zodResolver(schema),
+    defaultValues: {
+      name: "",
+      description: "",
+      difficulty: "EASY",
+      tags: [],
+    },
   });
 
   const mutation = api.recipe.create.useMutation({
     onSuccess: () => {
-      reset();
+      methods.reset({
+        name: "",
+        description: "",
+        difficulty: "EASY",
+        tags: [],
+      });
     },
   });
 
@@ -48,87 +59,80 @@ export default function Page() {
 
   return (
     <>
-      <form>
-        <div className="flex gap-4">
-          <Controller
-            control={control}
-            name="name"
-            render={({ field, fieldState }) => (
-              <Input
-                autoFocus
-                isRequired
-                label="Name"
-                description="Enter recipe name"
-                variant="bordered"
-                {...field}
-                isInvalid={!!fieldState.error}
-                errorMessage={fieldState.error?.message}
-              />
-            )}
-          />
-
-          <Controller
-            control={control}
-            name="difficulty"
-            render={({ field, fieldState }) => (
-              <Select
-                label="Difficulty"
-                description="Select recipe difficulty"
-                variant="bordered"
-                {...field}
-                isInvalid={!!fieldState.error}
-                errorMessage={fieldState.error?.message}
-              >
-                {["EASY", "MEDIUM", "HARD", "EXPERT"].map((difficulty) => (
-                  <SelectItem
-                    key={difficulty}
-                    value={difficulty as RecipeDifficulty}
-                  >
-                    {difficulty}
-                  </SelectItem>
-                ))}
-              </Select>
-            )}
-          />
-        </div>
-
-        <Controller
-          control={control}
-          name="description"
-          render={({ fieldState }) => (
-            <Textarea
-              minRows={2}
-              label="Description"
-              description="Enter recipe description"
-              variant="bordered"
-              {...register("description", { required: false })}
-              isInvalid={!!fieldState.error}
-              errorMessage={fieldState.error?.message}
+      <FormProvider {...methods}>
+        <form>
+          <div className="flex gap-4">
+            <Controller
+              control={methods.control}
+              name="name"
+              render={({ fieldState }) => (
+                <Input
+                  isRequired
+                  autoFocus
+                  label="Name"
+                  description="Enter recipe name"
+                  variant="bordered"
+                  {...methods.register("name", { required: true })}
+                  isInvalid={!!fieldState.error}
+                  errorMessage={fieldState.error?.message}
+                />
+              )}
             />
-          )}
-        />
 
-        <Controller
-          control={control}
-          name="tags"
-          render={({ field, fieldState }) => (
-            <div>
-              <TagInput
-                trigger={["Enter", "Space", "Comma"]}
-                placeholder="Enter tags"
-                style={{ width: 300 }}
-                menuStyle={{ width: 300 }}
-                {...field}
+            <Controller
+              control={methods.control}
+              name="difficulty"
+              render={({ field, fieldState }) => (
+                <Select
+                  isRequired
+                  label="Difficulty"
+                  description="Select recipe difficulty"
+                  variant="bordered"
+                  {...methods.register("difficulty", { required: true })}
+                  isInvalid={!!fieldState.error}
+                  errorMessage={fieldState.error?.message}
+                  selectedKeys={[field.value]}
+                >
+                  {["EASY", "MEDIUM", "HARD", "EXPERT"].map((difficulty) => (
+                    <SelectItem
+                      key={difficulty}
+                      value={difficulty as RecipeDifficulty}
+                    >
+                      {difficulty}
+                    </SelectItem>
+                  ))}
+                </Select>
+              )}
+            />
+          </div>
+
+          <Controller
+            control={methods.control}
+            name="description"
+            render={({ fieldState }) => (
+              <Textarea
+                minRows={2}
+                label="Description"
+                description="Enter recipe description"
+                variant="bordered"
+                {...methods.register("description", { required: false })}
+                isInvalid={!!fieldState.error}
+                errorMessage={fieldState.error?.message}
               />
-              {fieldState.error?.message}
-            </div>
-          )}
-        />
+            )}
+          />
 
-        <Button color="primary" onClick={handleSubmit(onSubmit)}>
-          Submit
-        </Button>
-      </form>
+          <Controller
+            control={methods.control}
+            name="tags"
+            render={() => <TagInput />}
+          />
+
+          <Button color="primary" onClick={methods.handleSubmit(onSubmit)}>
+            Submit
+          </Button>
+        </form>
+      </FormProvider>
     </>
   );
 }
