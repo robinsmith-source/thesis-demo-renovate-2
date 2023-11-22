@@ -50,8 +50,6 @@ function LoginBar({ session }: { session: Session }) {
   );
 }
 
-
-
 export default function MainNavbar() {
   const { data: session } = useSession();
 
