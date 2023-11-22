@@ -50,7 +50,7 @@ function LoginBar({ session }: { session: Session }) {
   );
 }
 
-import NextImage from "next/image";
+
 
 export default function MainNavbar() {
   const { data: session } = useSession();
