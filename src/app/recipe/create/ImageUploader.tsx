@@ -62,8 +62,8 @@ export default function ImageUploader() {
   return (
     <Card className="col-span-2">
       {isUploading && (
-        <CardHeader aria-label="Progressbar">
-          <Progress isIndeterminate />
+        <CardHeader>
+          <Progress isIndeterminate aria-label="Loading..." />
         </CardHeader>
       )}
       <CardBody className="h-64 p-4">
@@ -76,19 +76,21 @@ export default function ImageUploader() {
             <FaCloudArrowUp size={50} className="mb-4" />
             <span className="font-semibold">Choose files or drag and drop</span>
             <span className="text-xs font-light">(Image 4MB)</span>
-          </p>
-        </div>
-        <div className="flex justify-end">
-          {files.length > 0 && (
             <Button
+              isDisabled={files.length === 0}
               onClick={() => startUpload(files)}
               className="mt-4 "
               color="success"
             >
-              Upload {files.length} selected file/s
+              {files.length === 0
+                ? "Select Files"
+                : files.length === 1
+                ? `Upload ${files.length} selected file`
+                : `Upload ${files.length} selected files`}
             </Button>
-          )}
+          </p>
         </div>
+        <div className="flex justify-end"></div>
       </CardBody>
       {fields.length > 0 && (
         <CardFooter>
