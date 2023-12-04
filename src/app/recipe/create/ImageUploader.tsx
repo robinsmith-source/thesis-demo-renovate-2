@@ -69,28 +69,27 @@ export default function ImageUploader() {
       <CardBody className="h-64 p-4">
         <div
           {...getRootProps()}
-          className="flex h-full items-center justify-center rounded-xl border-2 border-dashed border-primary"
+          className="flex h-full flex-col items-center justify-center rounded-xl border-2 border-dashed border-primary"
         >
           <input {...getInputProps()} />
           <p className="flex flex-col items-center">
             <FaCloudArrowUp size={50} className="mb-4" />
             <span className="font-semibold">Choose files or drag and drop</span>
             <span className="text-xs font-light">(Image 4MB)</span>
-            <Button
-              isDisabled={files.length === 0}
-              onClick={() => startUpload(files)}
-              className="mt-4 "
-              color="success"
-            >
-              {files.length === 0
-                ? "Select Files"
-                : files.length === 1
-                ? `Upload ${files.length} selected file`
-                : `Upload ${files.length} selected files`}
-            </Button>
           </p>
+          <Button
+            isDisabled={files.length === 0}
+            onClick={() => startUpload(files)}
+            className="mt-4 "
+            color="success"
+          >
+            {files.length === 0
+              ? "Select Files"
+              : files.length === 1
+              ? `Upload ${files.length} selected file`
+              : `Upload ${files.length} selected files`}
+          </Button>
         </div>
-        <div className="flex justify-end"></div>
       </CardBody>
       {fields.length > 0 && (
         <CardFooter>
