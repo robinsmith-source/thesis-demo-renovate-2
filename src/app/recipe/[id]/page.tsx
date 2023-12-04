@@ -1,6 +1,6 @@
 import { api } from "~/trpc/server";
 import React from "react";
-import { Button, Card, CardBody, Chip, Image, Link } from "@nextui-org/react";
+import { Button, Chip, Image, Link } from "@nextui-org/react";
 import NextImage from "next/image";
 import NextLink from "next/link";
 import { notFound } from "next/navigation";
@@ -28,7 +28,12 @@ export default async function Page({ params }: { params: { id: string } }) {
             </span>
 
             {recipe.authorId === session?.user.id && (
-              <Button isIconOnly as={NextLink} color="secondary" href={"/edit"}>
+              <Button
+                isIconOnly
+                as={NextLink}
+                color="secondary"
+                href={`${params.id}/edit`}
+              >
                 <FaPenToSquare />
               </Button>
             )}
