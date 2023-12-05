@@ -12,6 +12,7 @@ import { getServerAuthSession } from "~/server/auth";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
 import { chefFileRouter } from "~/app/api/uploadthing/core";
+import { Toaster } from "react-hot-toast";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -42,7 +43,10 @@ export default async function RootLayout({
           <Providers>
             <MainNavbar />
             <TRPCReactProvider headers={headers()}>
-              <div className="mx-auto max-w-screen-xl p-8">{children}</div>
+              <div className="mx-auto max-w-screen-xl p-8">
+                <Toaster />
+                {children}
+              </div>
             </TRPCReactProvider>
           </Providers>
         </SessionProvider>

@@ -93,76 +93,74 @@ export default function RecipeForm({
   });
 
   return (
-    <>
-      <FormProvider {...methods}>
-        <form>
-          <div className="grid grid-cols-2 gap-2">
-            <Controller
-              control={methods.control}
-              name="name"
-              render={({ field, fieldState }) => (
-                <Input
-                  {...field}
-                  isRequired
-                  label="Recipe name"
-                  placeholder="My tasty Pizza"
-                  isInvalid={!!fieldState.error}
-                  errorMessage={fieldState.error?.message}
-                />
-              )}
-            />
+    <FormProvider {...methods}>
+      <form>
+        <div className="grid grid-cols-2 gap-2">
+          <Controller
+            control={methods.control}
+            name="name"
+            render={({ field, fieldState }) => (
+              <Input
+                {...field}
+                isRequired
+                label="Recipe name"
+                placeholder="My tasty Pizza"
+                isInvalid={!!fieldState.error}
+                errorMessage={fieldState.error?.message}
+              />
+            )}
+          />
 
-            <Controller
-              control={methods.control}
-              name="difficulty"
-              render={({ field, fieldState }) => (
-                <Select
-                  {...field}
-                  isRequired
-                  label="Recipe Difficulty"
-                  isInvalid={!!fieldState.error}
-                  errorMessage={fieldState.error?.message}
-                  selectedKeys={[field.value]}
-                >
-                  {["EASY", "MEDIUM", "HARD", "EXPERT"].map((difficulty) => (
-                    <SelectItem
-                      key={difficulty}
-                      value={difficulty as RecipeDifficulty}
-                    >
-                      {difficulty}
-                    </SelectItem>
-                  ))}
-                </Select>
-              )}
-            />
-            <ImageUploader />
-            <Controller
-              control={methods.control}
-              name="description"
-              render={({ fieldState }) => (
-                <Textarea
-                  className={"col-span-full"}
-                  minRows={2}
-                  label="Recipe Description"
-                  placeholder="My grandma used to make this pizza for me ..."
-                  {...methods.register("description", { required: false })}
-                  isInvalid={!!fieldState.error}
-                  errorMessage={fieldState.error?.message}
-                />
-              )}
-            />
-          </div>
+          <Controller
+            control={methods.control}
+            name="difficulty"
+            render={({ field, fieldState }) => (
+              <Select
+                {...field}
+                isRequired
+                label="Recipe Difficulty"
+                isInvalid={!!fieldState.error}
+                errorMessage={fieldState.error?.message}
+                selectedKeys={[field.value]}
+              >
+                {["EASY", "MEDIUM", "HARD", "EXPERT"].map((difficulty) => (
+                  <SelectItem
+                    key={difficulty}
+                    value={difficulty as RecipeDifficulty}
+                  >
+                    {difficulty}
+                  </SelectItem>
+                ))}
+              </Select>
+            )}
+          />
+          <ImageUploader />
+          <Controller
+            control={methods.control}
+            name="description"
+            render={({ fieldState }) => (
+              <Textarea
+                className={"col-span-full"}
+                minRows={2}
+                label="Recipe Description"
+                placeholder="My grandma used to make this pizza for me ..."
+                {...methods.register("description", { required: false })}
+                isInvalid={!!fieldState.error}
+                errorMessage={fieldState.error?.message}
+              />
+            )}
+          />
+        </div>
 
-          <div className="flex flex-col space-y-4">
-            <TagInput />
-            <StepCreator />
-          </div>
-          <Divider className="my-4" />
-          <Button color="primary" onClick={methods.handleSubmit(submit)}>
-            Submit
-          </Button>
-        </form>
-      </FormProvider>
-    </>
+        <div className="flex flex-col space-y-4">
+          <TagInput />
+          <StepCreator />
+        </div>
+        <Divider className="my-4" />
+        <Button color="primary" onClick={methods.handleSubmit(submit)}>
+          Submit
+        </Button>
+      </form>
+    </FormProvider>
   );
 }

@@ -2,7 +2,7 @@
 
 import { api } from "~/trpc/react";
 import RecipeForm, { RecipeFormValues } from "../../_common/RecipeForm";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
 export default function Form({ recipe }: { recipe: RecipeFormValues }) {
@@ -34,10 +34,5 @@ export default function Form({ recipe }: { recipe: RecipeFormValues }) {
     });
   };
 
-  return (
-    <>
-      <Toaster />
-      <RecipeForm submit={onSubmit} formValue={recipe} />
-    </>
-  );
+  return <RecipeForm submit={onSubmit} formValue={recipe} />;
 }

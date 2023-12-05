@@ -1,5 +1,5 @@
 "use client";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { api } from "~/trpc/react";
 import RecipeForm, { RecipeFormValues } from "../_common/RecipeForm";
 import { useRouter } from "next/navigation";
@@ -11,13 +11,6 @@ export default function RecipeCreate() {
     onSuccess: (id) => {
       toast.success("Recipe created!");
       router.push(`/recipe/${id}`);
-      // methods.reset({
-      //   name: "",
-      //   description: "",
-      //   difficulty: "EASY",
-      //   tags: [],
-      //   steps: [],
-      // });
     },
   });
 
@@ -41,10 +34,5 @@ export default function RecipeCreate() {
     });
   };
 
-  return (
-    <>
-      <Toaster />
-      <RecipeForm submit={onSubmit} formValue={{}} />
-    </>
-  );
+  return <RecipeForm submit={onSubmit} formValue={{}} />;
 }
