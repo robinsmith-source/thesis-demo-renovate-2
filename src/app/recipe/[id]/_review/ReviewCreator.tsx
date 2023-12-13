@@ -32,8 +32,11 @@ export default function ReviewCreator({ recipeId }: { recipeId: string }) {
         rating: 1,
         comment: "",
       });
-      //TODO: This may be a hacky way to refresh the page, but it works for now. Consider using a better method like revalidatePath as a saw so far
       router.refresh();
+    },
+    onError: (err) => {
+      console.log(err);
+      toast.error(err.message);
     },
   });
 

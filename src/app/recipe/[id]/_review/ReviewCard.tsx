@@ -1,4 +1,5 @@
 import {
+  Button,
   Card,
   CardBody,
   CardFooter,
@@ -6,7 +7,8 @@ import {
   Link,
   User,
 } from "@nextui-org/react";
-import { RecipeReview } from "@prisma/client";
+import type { RecipeReview } from "@prisma/client";
+import { FaPenToSquare } from "react-icons/fa6";
 import ReviewRating from "~/app/_components/ReviewRating";
 
 type RecipeCardProps = RecipeReview & {
@@ -16,13 +18,17 @@ type RecipeCardProps = RecipeReview & {
     image: string | null;
   };
 };
+
 export default function ReviewCard({ review }: { review: RecipeCardProps }) {
   const { rating, comment, author } = review;
 
   return (
     <Card className="w-96">
-      <CardHeader>
+      <CardHeader className="flex justify-between">
         <ReviewRating rating={rating} />
+        <Button isIconOnly size="sm" color="secondary" variant="flat">
+          <FaPenToSquare />
+        </Button>
       </CardHeader>
       {comment && <CardBody>{comment}</CardBody>}
       <CardFooter className="flex justify-end">
@@ -38,7 +44,7 @@ export default function ReviewCard({ review }: { review: RecipeCardProps }) {
             </Link>
           }
           avatarProps={{
-            src: author.image || undefined,
+            src: author.image ?? undefined,
             showFallback: true,
             size: "sm",
           }}
