@@ -19,7 +19,7 @@ export default function IngredientCreator({
   return (
     <div className="ml-8 space-y-4">
       <div className="flex gap-2">
-        <div className="text-lg">Step Ingredients</div>
+        <h3 className="text-lg">Step Ingredients</h3>
         <Button type="button" size="sm" onClick={() => append({ name: "" })}>
           Add Ingredient
         </Button>
