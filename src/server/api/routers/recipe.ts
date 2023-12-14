@@ -62,7 +62,7 @@ export const recipeRouter = createTRPCRouter({
         skip: z.number().min(0).optional(),
         name: z.string().optional(),
         difficulty: z.enum(["EASY", "MEDIUM", "HARD", "EXPERT"]).optional(),
-        labels: z.array(z.string()).nullable(),
+        labels: z.array(z.string()).optional(),
         tags: z.array(z.string()).optional(),
         authorId: z.string().cuid().optional(),
         orderBy: z.enum(["NEWEST", "OLDEST"]).optional(),
@@ -70,8 +70,31 @@ export const recipeRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
+      const query = {};
+
+      if (input.name) {
+        query.name = { contains: input.name };
+      }
+
+      if (input.difficulty) {
+        query.difficulty = input.difficulty;
+      }
+
+      if (input.tags) {
+        query.tags = { hasEvery: input.tags };
+      }
+
+      if (input.authorId) {
+        query.authorId = { contains: input.authorId };
+      }
+
+      if (input.labels) {
+        query.labels = { some: { name: { in: input.labels } } };
+      }
+
       const recipes = await ctx.db.recipe.findMany({
-        take: input.take,
+        // TODO: currently we don't use take because the manual non-db filtering messes with it
+        // this is bad :(
         skip: input.skip ?? 0,
         orderBy: (() => {
           switch (input.orderBy) {
@@ -83,12 +106,7 @@ export const recipeRouter = createTRPCRouter({
               return { createdAt: "desc" };
           }
         })(),
-        where: {
-          name: { contains: input.name },
-          difficulty: input.difficulty,
-          tags: { hasEvery: input.tags },
-          authorId: { contains: input.authorId },
-        },
+        where: query,
         include: {
           steps: {
             include: {
@@ -105,16 +123,18 @@ export const recipeRouter = createTRPCRouter({
       });
 
       if (input.labels) {
-        return recipes.filter(
-          (recipe) =>
-            input.labels?.every((inputLabel) =>
-              recipe.labels.some(
-                (recipeLabel) => recipeLabel.name === inputLabel,
+        return recipes
+          .filter(
+            (recipe) =>
+              input.labels?.every((inputLabel) =>
+                recipe.labels.some(
+                  (recipeLabel) => recipeLabel.name === inputLabel,
+                ),
               ),
-            ),
-        );
+          )
+          .slice(0, input.take);
       } else {
-        return recipes;
+        return recipes.slice(0, input.take);
       }
     }),
 
