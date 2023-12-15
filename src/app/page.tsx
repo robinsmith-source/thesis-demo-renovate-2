@@ -1,7 +1,8 @@
 import { api } from "~/trpc/server";
 import RecipeCard from "~/app/_components/RecipeCard";
-import { Image, Input } from "@nextui-org/react";
+import { Image } from "@nextui-org/react";
 import NextImage from "next/image";
+import RecipeSearchBar from "~/app/_components/RecipeSearchBar";
 
 export default async function Home() {
   const featuredRecipes = await api.recipe.getRecipesAdvanced.query({
@@ -22,16 +23,7 @@ export default async function Home() {
         />
       </div>
       <div className="mb-4 w-full md:w-1/2">
-        <Input
-          type="text"
-          //value={searchQuery}
-          //onChange={(e) => setSearchQuery(e.target.value)}
-          //onKeyPress={handleKeyPress}
-          placeholder="Search recipes..."
-          //bordered
-          //size="large"
-          fullWidth
-        />
+        <RecipeSearchBar />
       </div>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         {featuredRecipes ? (
