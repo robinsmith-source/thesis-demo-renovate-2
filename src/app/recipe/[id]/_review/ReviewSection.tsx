@@ -4,8 +4,10 @@ import ReviewCard from "./ReviewCard";
 
 export default async function ReviewSection({
   recipeId,
+  showReviewForm = true,
 }: {
   recipeId: string;
+  showReviewForm?: boolean;
 }) {
   const otherReviews = await api.review.getOthers.query({ recipeId });
 
@@ -15,7 +17,9 @@ export default async function ReviewSection({
 
   return (
     <section className="flex flex-col items-center">
-      <ReviewFormHandler recipeId={recipeId} myReviewQuery={myReview} />
+      {showReviewForm && (
+        <ReviewFormHandler recipeId={recipeId} myReviewQuery={myReview} />
+      )}
       {otherReviews && otherReviews.length > 0 && (
         <div className="mt-4 flex justify-center gap-2">
           {otherReviews.map((review) => (

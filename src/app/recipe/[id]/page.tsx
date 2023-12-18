@@ -6,12 +6,15 @@ import { notFound } from "next/navigation";
 import RecipeStep from "./RecipeStep";
 import IngredientTable from "./IngredientTable";
 import ReviewSection from "~/app/recipe/[id]/_review/ReviewSection";
+import { getServerAuthSession } from "~/server/auth";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const recipe = await api.recipe.get.query({ id: params.id });
   if (!recipe) {
     notFound();
   }
+
+  const session = await getServerAuthSession();
 
   return (
     <main>
@@ -52,7 +55,6 @@ export default async function Page({ params }: { params: { id: string } }) {
         </Card>
         <IngredientTable recipeSteps={recipe.steps} />
       </div>
-
       <div>
         <table>
           <thead>
@@ -72,9 +74,11 @@ export default async function Page({ params }: { params: { id: string } }) {
           <Chip key={tag}>#{tag}</Chip>
         ))}
       </div>
-
       <Divider className="my-4" />
-      <ReviewSection recipeId={recipe.id} />
+      <ReviewSection
+        recipeId={recipe.id}
+        showReviewForm={recipe.author.id !== session?.user.id}
+      />
     </main>
   );
 }
