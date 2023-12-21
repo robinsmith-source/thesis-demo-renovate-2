@@ -41,7 +41,7 @@ export default function FilterAccordion({
 
   return (
     <Accordion className="mt-0" isCompact hideIndicator>
-      <AccordionItem key="filters" aria-label="filters" trigger="">
+      <AccordionItem key="filters" aria-label="filters">
         <div className="flex flex-col flex-wrap items-start justify-start sm:flex-row sm:items-center">
           <Autocomplete
             className="mb-4 sm:mb-0 sm:w-1/3 md:w-1/4 lg:w-1/5"
@@ -57,6 +57,7 @@ export default function FilterAccordion({
                 const newLabelInput = [...labelInput, value];
                 setLabelInput(newLabelInput);
                 handleLabelFilter(newLabelInput);
+                console.log("newLabelInput", newLabelInput);
               }
             }}
           >
@@ -74,22 +75,22 @@ export default function FilterAccordion({
                       {label.name}
                     </AutocompleteItem>
                   )) || (
-                  <AutocompleteItem key="noElements">
-                    <span className="text-danger-500">No labels found!</span>
-                  </AutocompleteItem>
-                )}
+                    <AutocompleteItem key="noElements">
+                      <span className="text-danger-500">No labels found!</span>
+                    </AutocompleteItem>
+                  )}
               </AutocompleteSection>
             )) || (
-              <AutocompleteSection
-                key="noSections"
-                className="text-danger-500"
-                title="No categories found!"
-              >
-                <AutocompleteItem key="noElements" className="text-danger-500">
-                  No labels found!
-                </AutocompleteItem>
-              </AutocompleteSection>
-            )}
+                <AutocompleteSection
+                  key="noSections"
+                  className="text-danger-500"
+                  title="No categories found!"
+                >
+                  <AutocompleteItem key="noElements" className="text-danger-500">
+                    No labels found!
+                  </AutocompleteItem>
+                </AutocompleteSection>
+              )}
           </Autocomplete>
           <div className="flex flex-row flex-wrap items-center justify-start">
             {
@@ -105,6 +106,7 @@ export default function FilterAccordion({
                     );
                     setLabelInput(newLabelInput);
                     handleLabelFilter(newLabelInput);
+                    console.log("newLabelInput", newLabelInput);
                   }}
                 >
                   {label}

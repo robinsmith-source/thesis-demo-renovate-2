@@ -2,8 +2,8 @@ import { api } from "~/trpc/server";
 import RecipeCard from "~/app/_components/RecipeCard";
 
 import { type Recipe, PrismaClient } from "@prisma/client";
-import AdvancedRecipeSearch from "~/app/_components/AdvancedRecipeSearch";
-import FilterAccordion from "~/app/_components/FilterAccordion";
+import AdvancedRecipeSearch from "~/app/_components/search/AdvancedRecipeSearch";
+import FilterAccordion from "~/app/_components/search/FilterAccordion";
 import { Button } from "@nextui-org/react";
 import { FaFilter } from "react-icons/fa6";
 

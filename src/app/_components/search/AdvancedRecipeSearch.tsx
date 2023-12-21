@@ -1,19 +1,19 @@
 "use client";
 
-import { type ChangeEvent, useState } from "react";
-import { Input, Tab, Tabs } from "@nextui-org/react";
+import { useState } from "react";
+import { Input } from "@nextui-org/react";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
 
 type queryInput =
   | Partial<{
-      name?: string;
-      difficulty?: "EASY" | "MEDIUM" | "HARD" | "EXPERT";
-      labels?: Label[];
-      tags?: string[];
-      authorId?: string;
-    }>
+    name?: string;
+    difficulty?: "EASY" | "MEDIUM" | "HARD" | "EXPERT";
+    labels?: Label[];
+    tags?: string[];
+    authorId?: string;
+  }>
   | undefined;
 
 type Label = {
