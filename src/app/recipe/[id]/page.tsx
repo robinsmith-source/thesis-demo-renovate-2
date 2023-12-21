@@ -5,7 +5,7 @@ import NextImage from "next/image";
 import { notFound } from "next/navigation";
 import RecipeStep from "./RecipeStep";
 import IngredientTable from "./IngredientTable";
-import RecipeAuthorSection from "~/app/recipe/[id]/RecipeAuthorSection";
+import RecipeAuthorSection from "./RecipeAuthorSection";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const recipe = await api.recipe.get.query({ id: params.id });
@@ -69,7 +69,7 @@ export default async function Page({ params }: { params: { id: string } }) {
       </div>
 
       <Divider className="my-4" />
-      <RecipeAuthorSection {...recipe.author} />
+      <RecipeAuthorSection currentRecipeId={params.id} recipeAuthor={recipe.author} />
     </main>
   );
 }

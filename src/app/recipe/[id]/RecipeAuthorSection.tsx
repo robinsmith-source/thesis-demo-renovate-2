@@ -3,9 +3,11 @@ import React from "react";
 import type { User as UserType } from "@prisma/client";
 import { api } from "~/trpc/server";
 import RecipeCard from "~/app/_components/RecipeCard";
+import { parseMutationArgs } from "@tanstack/react-query";
 
-export default async function RecipeAuthorSection(recipeAuthor: UserType) {
-  const authorsRecipe = await api.recipe.getRecipesAdvanced.query({
+export default async function RecipeAuthorSection({currentRecipeId, recipeAuthor}:
+   {currentRecipeId: string; recipeAuthor: UserType}) {
+  const authorsRecipe = await api.recipe.getRecipesAdvanced.query({                
     take: 3,
     authorId: recipeAuthor.id,
   });
@@ -31,19 +33,21 @@ export default async function RecipeAuthorSection(recipeAuthor: UserType) {
           size: "md",
           src: recipeAuthor.image ?? undefined,
         }}
-      />
+      /> 
       <h3 className="text-xl font-medium">
-        Other recipes from {recipeAuthor.name}
+        Other recipes from {recipeAuthor.name} 
       </h3>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         {authorsRecipe ? (
-          authorsRecipe.map((recipe) => (
+          authorsRecipe
+          .filter((recipe) => recipe.id !== currentRecipeId)
+          .map((recipe) => (
             <RecipeCard recipeId={recipe.id} key={recipe.id} />
           ))
         ) : (
-          <h2>No recipes found...</h2>
+          <h2>No other recipes from {recipeAuthor.name} found...</h2>
         )}
       </div>
     </div>
-  );
-}
+  ); 
+}   
