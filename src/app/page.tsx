@@ -4,8 +4,10 @@ import NextImage from "next/image";
 import RecipeCardsSection from "~/app/_components/RecipeCardsSection";
 
 export default async function Home() {
-  const latestRecipes = await api.recipe.getLatestRecipes.query({
-    take: 6,
+  const latestRecipes = await api.recipe.getRecipeCards.query({
+    skip: 0,
+    tags: [],
+    take: 8,
   });
 
   return (
