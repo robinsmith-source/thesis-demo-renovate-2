@@ -88,6 +88,23 @@ export default function ReviewFormHandler({
     },
   });
 
+  const onDelete = (reviewId: string) => {
+    deleteMutation.mutate({
+      reviewId,
+    });
+  };
+
+  const deleteMutation = api.review.delete.useMutation({
+    onSuccess: () => {
+      toast.success("Review deleted successfully");
+      setSubmittedReview(null);
+      setMode(Modes.CREATE);
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
   return (
     <>
       {mode === Modes.CREATE && <ReviewForm submit={onCreate} formValue={{}} />}
@@ -99,6 +116,9 @@ export default function ReviewFormHandler({
           review={submittedReview}
           handleEditClick={() => {
             setMode(Modes.EDIT);
+          }}
+          handleDeleteClick={(reviewId) => {
+            onDelete(reviewId);
           }}
         />
       )}

@@ -8,6 +8,7 @@ import {
   User,
 } from "@nextui-org/react";
 import ReviewRating from "~/app/_components/ReviewRating";
+import { FaTrash } from "react-icons/fa6";
 
 type ReviewCardProps = {
   review: {
@@ -21,18 +22,29 @@ type ReviewCardProps = {
     };
   };
   handleEditClick?: () => void;
+  handleDeleteClick?: (reviewId: string) => void;
 };
 
 export default function ReviewCard({
   review,
   handleEditClick,
+  handleDeleteClick,
 }: ReviewCardProps) {
-  const { rating, comment, author } = review;
+  const { id, rating, comment, author } = review;
 
   return (
     <Card className="w-[36rem]">
-      <CardHeader className="-mb-4">
+      <CardHeader className="-mb-4 flex justify-between">
         <ReviewRating rating={rating} />
+        {handleDeleteClick && (
+          <Button
+            isIconOnly
+            onPress={() => handleDeleteClick(id)}
+            color="danger"
+          >
+            <FaTrash />
+          </Button>
+        )}
       </CardHeader>
       {comment && <CardBody className="px-6">{comment}</CardBody>}
       <CardFooter className="flex justify-end">
@@ -56,7 +68,7 @@ export default function ReviewCard({
           />
         )}
         {handleEditClick && (
-          <Button onClick={handleEditClick} color="secondary">
+          <Button onPress={handleEditClick} color="secondary">
             Edit
           </Button>
         )}
