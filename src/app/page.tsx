@@ -5,7 +5,6 @@ import RecipeCardsSection from "~/app/_components/RecipeCardsSection";
 
 export default async function Home() {
   const latestRecipes = await api.recipe.getRecipeCards.query({
-    skip: 0,
     tags: [],
     take: 8,
   });

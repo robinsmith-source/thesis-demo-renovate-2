@@ -5,9 +5,8 @@ import RecipeCardsSection from "~/app/_components/RecipeCardsSection";
 export default async function Page({ params }: { params: { id: string } }) {
   const user = await api.user.get.query({ id: params.id });
   const userRecipes = await api.recipe.getRecipeCards.query({
-    skip: 0,
     tags: [],
-    take: 8,
+    take: 20,
     authorId: params.id,
   });
 

@@ -39,6 +39,7 @@ export const recipeRouter = createTRPCRouter({
         skip: z.number().min(0).optional(),
         orderBy: z.enum(["NEWEST", "OLDEST"]).optional(),
         authorId: z.string().cuid().optional(),
+        notAuthorId: z.string().cuid().optional(),
         tags: z.array(z.string()).optional(),
       }),
     )
@@ -55,7 +56,8 @@ export const recipeRouter = createTRPCRouter({
           }
         })(),
         where: {
-          authorId: input.authorId,
+          ...(input.authorId && { authorId: input.authorId }),
+          ...(input.notAuthorId && { authorId: { not: input.notAuthorId } }),
           tags: { hasEvery: input.tags },
         },
         skip: input.skip ?? 0,
