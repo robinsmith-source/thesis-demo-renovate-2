@@ -30,14 +30,13 @@ export default function AdvancedRecipeSearch() {
   // search parameters
   const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState<queryInput>();
-  const [selectedSearchMode, setSelectedSearchMode] = useState("public");
 
   const handleSearch = useDebouncedCallback(
     (searchFilters: queryInput) => {
       const params = new URLSearchParams(searchParams);
 
       if (searchFilters) {
-        const { name, difficulty, labels, tags, authorId } = searchFilters;
+        const { name, difficulty, tags, authorId } = searchFilters;
 
         name != null && params.set("name", name); // "" === null | without this empty search bar does not work
         difficulty && params.set("difficulty", difficulty ?? "");
