@@ -22,7 +22,7 @@ type ReviewCardProps = {
     };
   };
   handleEditClick?: () => void;
-  handleDeleteClick?: (reviewId: string) => void;
+  handleDeleteClick?: () => void;
 };
 
 export default function ReviewCard({
@@ -30,7 +30,7 @@ export default function ReviewCard({
   handleEditClick,
   handleDeleteClick,
 }: ReviewCardProps) {
-  const { id, rating, comment, author } = review;
+  const { rating, comment, author } = review;
 
   return (
     <Card className="w-[36rem]">
@@ -51,7 +51,7 @@ export default function ReviewCard({
             <Button
               isIconOnly
               size="sm"
-              onPress={() => handleDeleteClick(id)}
+              onPress={() => handleDeleteClick()}
               color="danger"
             >
               <FaTrash />
