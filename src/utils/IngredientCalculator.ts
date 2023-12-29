@@ -28,7 +28,6 @@ export function calculateIngredients(
 
     if (existingIngredient) {
       existingIngredient.quantity += ingredient.quantity * portionSize;
-      console.log(existingIngredient);
     } else {
       result.push({
         ...ingredient,
