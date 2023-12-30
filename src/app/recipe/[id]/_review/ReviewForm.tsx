@@ -35,10 +35,10 @@ export default function ReviewForm({
     },
   });
 
-  function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
+  async function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
     // if ctrl + enter is pressed, submit the form
     if (event.ctrlKey && event.key === "Enter") {
-      handleSubmit(submit)();
+      await handleSubmit(submit)();
     }
   }
 
