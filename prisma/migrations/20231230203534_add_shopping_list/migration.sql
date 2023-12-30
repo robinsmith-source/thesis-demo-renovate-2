@@ -18,11 +18,14 @@ CREATE TABLE "ShoppingListItem" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "quantity" DOUBLE PRECISION NOT NULL,
-    "unit" "Unit",
+    "unit" "Unit" NOT NULL,
     "shoppingListId" TEXT NOT NULL,
 
     CONSTRAINT "ShoppingListItem_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ShoppingListItem_name_unit_key" ON "ShoppingListItem"("name", "unit");
 
 -- AddForeignKey
 ALTER TABLE "RecipeLabel" ADD CONSTRAINT "RecipeLabel_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "RecipeLabelCategory"("id") ON DELETE CASCADE ON UPDATE CASCADE;
