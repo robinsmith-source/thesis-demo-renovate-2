@@ -71,7 +71,7 @@ export const recipeRouter = createTRPCRouter({
         where: {
           ...(input.excludeRecipeId && { id: { not: input.excludeRecipeId } }),
           ...(input.authorId && { authorId: input.authorId }),
-          tags: { hasEvery: input.tags },
+          ...(input.tags && { tags: { hasEvery: input.tags } }),
           ...(input.labels && createLabelQuery(input.labels)),
         },
         skip: input.skip ?? 0,
@@ -203,19 +203,17 @@ export const recipeRouter = createTRPCRouter({
               z.object({
                 name: z.string().min(1),
                 quantity: z.number().min(1),
-                unit: z
-                  .enum([
-                    "GRAM",
-                    "KILOGRAM",
-                    "LITER",
-                    "MILLILITER",
-                    "TEASPOON",
-                    "TABLESPOON",
-                    "CUP",
-                    "PINCH",
-                    "PIECE",
-                  ])
-                  .nullable(),
+                unit: z.enum([
+                  "GRAM",
+                  "KILOGRAM",
+                  "LITER",
+                  "MILLILITER",
+                  "TEASPOON",
+                  "TABLESPOON",
+                  "CUP",
+                  "PINCH",
+                  "PIECE",
+                ]),
               }),
             ),
           }),
@@ -313,19 +311,17 @@ export const recipeRouter = createTRPCRouter({
               z.object({
                 name: z.string().min(1),
                 quantity: z.number().min(1),
-                unit: z
-                  .enum([
-                    "GRAM",
-                    "KILOGRAM",
-                    "LITER",
-                    "MILLILITER",
-                    "TEASPOON",
-                    "TABLESPOON",
-                    "CUP",
-                    "PINCH",
-                    "PIECE",
-                  ])
-                  .nullable(),
+                unit: z.enum([
+                  "GRAM",
+                  "KILOGRAM",
+                  "LITER",
+                  "MILLILITER",
+                  "TEASPOON",
+                  "TABLESPOON",
+                  "CUP",
+                  "PINCH",
+                  "PIECE",
+                ]),
               }),
             ),
           }),
