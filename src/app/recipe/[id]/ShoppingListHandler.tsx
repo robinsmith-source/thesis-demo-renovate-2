@@ -34,7 +34,13 @@ export default function ShoppingListHandler({
 
   const createMutation = api.shoppingList.addItems.useMutation({
     onSuccess: () => {
-      toast.success("Ingredients added successfully");
+      toast.success(
+        `${
+          selectedIngredients && selectedIngredients?.length === 1
+            ? "Ingredient"
+            : "Ingredients"
+        } added successfully`,
+      );
     },
     onError: (error) => {
       toast.error(error.message);
@@ -55,7 +61,11 @@ export default function ShoppingListHandler({
           selectedIngredients.length < 1
         }
       >
-        Add items to shopping list
+        {shoppingListId && selectedIngredients && selectedIngredients.length > 0
+          ? `Add ${
+              selectedIngredients?.length <= 1 ? "Ingredient" : "Ingredients"
+            } to shopping list`
+          : "Select ingredients"}
       </Button>
       <IngredientTable
         ingredients={ingredients}
