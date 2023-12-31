@@ -61,11 +61,13 @@ export default function ShoppingListHandler({
           selectedIngredients.length < 1
         }
       >
-        {shoppingListId && selectedIngredients && selectedIngredients.length > 0
-          ? `Add ${
-              selectedIngredients?.length <= 1 ? "Ingredient" : "Ingredients"
-            } to shopping list`
-          : "Select ingredients"}
+        {!selectedIngredients || selectedIngredients.length < 1
+          ? "Select ingredients"
+          : !shoppingListId
+            ? "Select shopping list"
+            : `Add ${
+                selectedIngredients?.length <= 1 ? "Ingredient" : "Ingredients"
+              } to shopping list`}
       </Button>
       <IngredientTable
         ingredients={ingredients}
