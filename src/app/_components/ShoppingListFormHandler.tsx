@@ -17,7 +17,7 @@ export type ShoppingListFormType = {
 };
 
 interface ShoppingListFormHandlerProps {
-  mode: Modes;
+  mode?: Modes;
   shoppingList?: {
     id: string;
     name: string;
@@ -26,7 +26,7 @@ interface ShoppingListFormHandlerProps {
 }
 
 export default function ShoppingListFormHandler({
-  mode,
+  mode = Modes.CREATE,
   shoppingList,
 }: ShoppingListFormHandlerProps) {
   if (mode === Modes.EDIT && !shoppingList) {

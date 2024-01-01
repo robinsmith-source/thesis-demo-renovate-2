@@ -12,12 +12,11 @@ import {
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import type { ShoppingListFormType } from "~/app/recipe/[id]/ShoppingListFormHandler";
+import type { ShoppingListFormType } from "~/app/_components/ShoppingListFormHandler";
 
-interface ConfirmationModalProps {
+interface ShoppingListFormModalProps {
   onOpenChange: () => void;
   isOpen: boolean;
-  shoppingList?: (ShoppingListFormType & { id: string }) | null;
   formValue: {
     id: string;
     name: string;
@@ -31,7 +30,7 @@ export default function ShoppingListFormModal({
   isOpen,
   formValue,
   submit,
-}: ConfirmationModalProps) {
+}: ShoppingListFormModalProps) {
   const schema = z.object({
     name: z.string().min(3),
     description: z.string().optional(),

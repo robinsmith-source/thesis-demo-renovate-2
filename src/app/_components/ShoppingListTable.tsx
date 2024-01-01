@@ -12,9 +12,9 @@ import { convertUnitName } from "~/app/utils";
 import type { ShoppingList, ShoppingListItem } from "@prisma/client";
 import ShoppingListFormHandler, {
   Modes,
-} from "~/app/recipe/[id]/ShoppingListFormHandler";
+} from "~/app/_components/ShoppingListFormHandler";
 
-interface ShoppingListTableProps {
+export interface ShoppingListTableProps {
   shoppingList: ShoppingList & {
     items: ShoppingListItem[];
   };

@@ -23,7 +23,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   }[];
 
   if (session?.user) {
-    shoppingLists = await api.shoppingList.getAll.query();
+    shoppingLists = await api.shoppingList.getAllLists.query();
   }
 
   console.log(recipe.images);

@@ -1,20 +1,17 @@
 import { api } from "~/trpc/server";
-import ShoppingListTable from "~/app/shoppingList/ShoppingListTable";
+import ShoppingListFormHandler from "~/app/_components/ShoppingListFormHandler";
+import ShoppingListTableSection from "~/app/_components/ShoppingListTableSection";
 
 export const dynamic = "force-dynamic";
 export default async function Page() {
-  const shoppingLists = await api.shoppingList.getAllTableData.query();
+  const shoppingLists = await api.shoppingList.getAllTables.query();
   return (
-    <main>
-      <h1>Shopping Lists</h1>
-      <section className="grid grid-cols-1 place-items-center items-center justify-center gap-8 sm:grid-cols-2 lg:grid-cols-3">
-        {shoppingLists.map((shoppingList) => (
-          <ShoppingListTable
-            shoppingList={shoppingList}
-            key={shoppingList.id}
-          />
-        ))}
-      </section>
+    <main className="space-y-8">
+      <div className="flex items-center justify-between">
+        <h1>Shopping Lists</h1>
+        <ShoppingListFormHandler />
+      </div>
+      <ShoppingListTableSection shoppingLists={shoppingLists} />
     </main>
   );
 }
