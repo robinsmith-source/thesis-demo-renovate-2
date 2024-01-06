@@ -34,7 +34,7 @@ export default function IngredientCreator({
               <Button
                 type="button"
                 size="sm"
-                onClick={() => append({ name: "" })}
+                onPress={() => append({ name: "" })}
               >
                 Add Ingredient
               </Button>
@@ -92,6 +92,8 @@ export default function IngredientCreator({
                       selectedKeys={[field.value]}
                       isInvalid={!!fieldState.error}
                       errorMessage={fieldState.error?.message}
+                      isRequired
+                      disallowEmptySelection={true}
                     >
                       {[
                         "GRAM",
@@ -108,7 +110,8 @@ export default function IngredientCreator({
                           key={ingredientUnit}
                           value={ingredientUnit as Unit}
                         >
-                          {ingredientUnit as Unit}
+                          {ingredientUnit[0] +
+                            ingredientUnit.slice(1).toLowerCase()}
                         </SelectItem>
                       ))}
                     </Select>
@@ -121,7 +124,7 @@ export default function IngredientCreator({
                   type="button"
                   size="sm"
                   variant="flat"
-                  onClick={() => remove(index)}
+                  onPress={() => remove(index)}
                 >
                   <FaMinus />
                 </Button>

@@ -1,10 +1,14 @@
-import { api } from "~/trpc/server";
-import React from "react";
-import { Card, Chip, Image, Link } from "@nextui-org/react";
-import NextImage from "next/image";
+import { Button, Chip, Divider, Link } from "@nextui-org/react";
+import NextLink from "next/link";
 import { notFound } from "next/navigation";
-import RecipeStep from "./RecipeStep";
+import { FaPenToSquare } from "react-icons/fa6";
+import ReviewSection from "./_review/ReviewSection";
+import { auth } from "auth";
+import { api } from "~/trpc/server";
+import ImageCarousel from "./ImageCarousel";
 import IngredientTable from "./IngredientTable";
+import RecipeStep from "./RecipeStep";
+import RecipeDeleteHandler from "~/app/recipe/[id]/RecipeDeleteHandler";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const recipe = await api.recipe.get.query({ id: params.id });
@@ -12,19 +16,36 @@ export default async function Page({ params }: { params: { id: string } }) {
     notFound();
   }
 
+  const session = await auth();
+  console.log(recipe.images);
   return (
     <main>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
-          <h1 className="text-2xl font-bold">
-            {recipe.name} (
+          <div className="flex items-center gap-x-2">
+            <h1 className="text-2xl font-bold">{recipe.name}</h1>
+
             <span className="capitalize">
-              {recipe.difficulty.toLowerCase()}
+              ({recipe.difficulty.toLowerCase()})
             </span>
-            )
-          </h1>
+
+            {recipe.authorId === session?.user?.id && (
+              <>
+                <Button
+                  isIconOnly
+                  as={NextLink}
+                  color="secondary"
+                  href={`${params.id}/edit`}
+                >
+                  <FaPenToSquare />
+                </Button>
+                <RecipeDeleteHandler recipeId={recipe.id} />
+              </>
+            )}
+          </div>
+
           <p>
-            created by{" "}
+            created by <br />
             <Link color="secondary" href={`/user/${recipe.author.id}`}>
               {recipe.author.name}
             </Link>
@@ -37,21 +58,9 @@ export default async function Page({ params }: { params: { id: string } }) {
           </div>
           <p>{recipe.description}</p>
         </div>
-        <Card className="row-span-2 h-96 place-self-center">
-          <Image
-            as={NextImage}
-            priority
-            width={500}
-            height={300}
-            removeWrapper
-            alt="recipe header"
-            className="z-0 h-full w-full object-cover"
-            src="https://placekitten.com/500/300"
-          />
-        </Card>
+        <ImageCarousel images={recipe.images} />
         <IngredientTable recipeSteps={recipe.steps} />
       </div>
-
       <div>
         <table>
           <thead>
@@ -71,6 +80,13 @@ export default async function Page({ params }: { params: { id: string } }) {
           <Chip key={tag}>#{tag}</Chip>
         ))}
       </div>
+      <Divider className="my-4" />
+      <ReviewSection
+        recipeId={recipe.id}
+        hideReviewForm={
+          recipe.author.id === session?.user?.id || session == null
+        }
+      />
     </main>
   );
 }

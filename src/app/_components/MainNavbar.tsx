@@ -25,6 +25,7 @@ import NextImage from "next/image";
 import { useState } from "react";
 
 function LoginBar({ session }: { session: Session }) {
+  if (!session?.user) return null;
   return (
     <Dropdown placement="bottom-end">
       <DropdownTrigger>
@@ -147,7 +148,7 @@ export default function MainNavbar() {
           <ThemeSwitcher />
         </NavbarItem>
         <NavbarItem>
-          {session ? (
+          {session?.user ? (
             <LoginBar session={session} />
           ) : (
             <Button
