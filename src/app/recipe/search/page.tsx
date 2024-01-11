@@ -72,7 +72,8 @@ export default async function Page({
   });
 
   const queryParameters = createQueryParams(searchParams ?? {});
-  const displayedRecipeCards = await api.recipe.getRecipeCards.query(queryParameters);
+  const displayedRecipeCards =
+    await api.recipe.getRecipeCards.query(queryParameters);
   const count = await api.recipe.getRecipeCount.query(queryParameters);
 
   // calculate page count for pagination
@@ -80,11 +81,10 @@ export default async function Page({
 
   return (
     <main className="flex flex-col items-center">
-        <div className="flex w-full flex-row items-center justify-between">
-          <AdvancedRecipeSearch />
-          </div>
-          <FilterAccordion labels={allLabels} />
-      <span>number of matches: {count} </span>
+      <div className="flex w-full flex-row items-center justify-between">
+        <AdvancedRecipeSearch />
+      </div>
+      <FilterAccordion labels={allLabels} />
       <div className="flex flex-col items-center justify-start">
         <RecipeCardsSection recipes={displayedRecipeCards} />
         <QueryPagination pageCount={pageCount} className="mt-2" />
