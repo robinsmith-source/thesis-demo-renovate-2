@@ -62,7 +62,7 @@ export const reviewRouter = createTRPCRouter({
       }),
     )
     .query(({ input, ctx }) => {
-      return ctx.db.recipeReview.findFirst({
+      const ownReview = ctx.db.recipeReview.findFirst({
         where: {
           recipeId: input.recipeId,
           authorId: ctx.session.user.id,
@@ -73,6 +73,15 @@ export const reviewRouter = createTRPCRouter({
           comment: true,
         },
       });
+
+      if (!ownReview) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Review not found",
+        });
+      }
+
+      return ownReview;
     }),
 
   getOthers: publicProcedure
@@ -82,7 +91,7 @@ export const reviewRouter = createTRPCRouter({
       }),
     )
     .query(({ input, ctx }) => {
-      return ctx.db.recipeReview.findMany({
+      const otherReviews = ctx.db.recipeReview.findMany({
         where: {
           recipeId: input.recipeId,
           authorId: { not: ctx?.session?.user?.id },
@@ -97,6 +106,15 @@ export const reviewRouter = createTRPCRouter({
           },
         },
       });
+
+      if (!otherReviews) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Reviews not found",
+        });
+      }
+
+      return otherReviews;
     }),
 
   update: protectedProcedure
