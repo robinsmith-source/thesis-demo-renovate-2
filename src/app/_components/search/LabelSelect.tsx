@@ -7,11 +7,13 @@ import { useState } from "react";
 
 type LabelSelectProps = {
   categories: { name: string; RecipeLabel: { name: string; }[]; }[];
+  disabled?: boolean;
   className?: string;
 };
 
 export default function LabelSelect({
   categories,
+  disabled,
   className,
 }: LabelSelectProps) {
   const pathname = usePathname();
@@ -36,6 +38,7 @@ export default function LabelSelect({
 
   return (
     <Select
+      isDisabled={disabled}
       aria-label="Labels"
       placeholder={placeholder}
       selectionMode="multiple"

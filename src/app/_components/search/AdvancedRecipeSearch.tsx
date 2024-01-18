@@ -1,6 +1,13 @@
 "use client";
 
-import { Button, Card, Input, Select, SelectItem } from "@nextui-org/react";
+import {
+  Button,
+  Card,
+  Divider,
+  Input,
+  Select,
+  SelectItem,
+} from "@nextui-org/react";
 import { FaFilter, FaMagnifyingGlass } from "react-icons/fa6";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
@@ -39,7 +46,7 @@ export default function AdvancedRecipeSearch({
     if (size) {
       params.set("pageSize", size);
     }
-    
+
     router.replace(`${pathname}?${params.toString()}`);
   };
 
@@ -66,7 +73,7 @@ export default function AdvancedRecipeSearch({
           <Input
             type="text"
             className="w-1/2"
-            defaultValue={searchParams.get("name")?.toString()}
+            defaultValue={searchParams.get("name") ?? ""}
             startContent={<FaMagnifyingGlass className="mr-1" />}
             placeholder="Search recipes"
             onValueChange={(value: string) => handleInput(value)}
@@ -77,15 +84,15 @@ export default function AdvancedRecipeSearch({
             size="sm"
             className="w-32"
             selectionMode="single"
-            defaultSelectedKeys={searchParams.get("order") ?? "NEWEST"}
+            defaultSelectedKeys={searchParams.get("order") ?? ""}
             onSelectionChange={(value) =>
               handleSearch({ sort: Array.from(value)[0]?.toString() ?? "" })
             }
           >
-            <SelectItem key="NEWEST" value="NEWEST">
+            <SelectItem key="NEWEST" value="newest">
               newest
             </SelectItem>
-            <SelectItem key="OLDEST" value="OLDEST">
+            <SelectItem key="OLDEST" value="oldest">
               oldest
             </SelectItem>
           </Select>
@@ -95,6 +102,7 @@ export default function AdvancedRecipeSearch({
             size="sm"
             className="w-24"
             selectionMode="single"
+            defaultSelectedKeys={searchParams.get("pageSize") ?? "12"}
             onSelectionChange={(value) =>
               handleSearch({ size: Array.from(value)[0]?.toString() ?? "" })
             }
@@ -111,7 +119,11 @@ export default function AdvancedRecipeSearch({
           </Select>
         </div>
         <motion.div
-          className="mx-4 mb-2 flex w-full flex-row items-center justify-between"
+          className={
+            !filtersCollapsed
+              ? "mx-4 my-2 flex flex-col items-start justify-between lg:flex-row lg:items-center"
+              : ""
+          }
           initial={{ opacity: 0, height: 0 }}
           animate={{
             opacity: !filtersCollapsed ? 1 : 0,
@@ -119,14 +131,25 @@ export default function AdvancedRecipeSearch({
           }}
           transition={{ duration: 0.2 }}
         >
-          <div className="flex w-1/2 flex-row items-center justify-start">
-            <span className="font-bold text-default-600">Difficulty</span>
-            <DifficultyInput />
-          </div>
-          <div className="mr-5 flex w-1/2 flex-row items-center justify-start">
-            <span className="font-bold text-default-600">Labels</span>
-            <LabelSelect categories={categories} className="ml-2 w-2/3" />
-          </div>
+          {!filtersCollapsed ? (
+            <div className="flex w-full flex-col">
+              <Divider className="w-full bg-background-400" />
+              <div className="mt-2 flex w-full flex-row items-center justify-between">
+                <div className="flex flex-row items-center justify-start md:w-1/2">
+                  <span className="font-bold text-default-600">Difficulty</span>
+                  <DifficultyInput />
+                </div>
+                <div className="mr-5 flex flex-row items-center justify-start md:w-1/2">
+                  <span className="font-bold text-default-600">Labels</span>
+                  <LabelSelect
+                    categories={categories}
+                    disabled={filtersCollapsed}
+                    className="w-full lg:ml-2 lg:w-2/3"
+                  />
+                </div>
+              </div>
+            </div>
+          ) : null}
         </motion.div>
       </Card>
     </div>

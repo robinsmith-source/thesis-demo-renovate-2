@@ -53,7 +53,7 @@ export default async function Page({
 
   const queryParameters = createQueryParams(searchParams ?? {});
   const displayedRecipeCards =
-    await api.recipe.getRecipeCards.query(queryParameters);
+    await api.recipe.getCards.query(queryParameters);
 
   // calculate page count for pagination
   const count = await api.recipe.getRecipeCount.query(queryParameters);
