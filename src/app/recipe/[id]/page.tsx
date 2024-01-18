@@ -81,7 +81,7 @@ export default async function Page({ params }: { params: { id: string } }) {
       </PortionSizeProvider>
       <div className="mt-4 flex justify-center gap-2">
         {recipe.tags.map((tag) => (
-          <Chip className="bg-cyan-600" key={tag}>
+          <Chip color="secondary" key={tag} variant="flat">
             #{tag}
           </Chip>
         ))}

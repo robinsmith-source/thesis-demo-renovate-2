@@ -14,17 +14,17 @@ export default function RecipeStep({ step }: { step: RecipeStep }) {
   const stepTypeColor = (step: RecipeStepType) => {
     switch (step) {
       case RecipeStepType.PREP:
-        return "bg-green-500";
+        return "bg-green-500/60";
       case RecipeStepType.MIX:
-        return "bg-teal-600";
+        return "bg-teal-600/60";
       case RecipeStepType.COOK:
-        return "bg-amber-500";
+        return "bg-amber-500/60";
       case RecipeStepType.REST:
-        return "bg-orange-500";
+        return "bg-orange-500/60";
       case RecipeStepType.SEASON:
-        return "bg-purple-500";
+        return "bg-purple-500/60";
       case RecipeStepType.SERVE:
-        return "bg-fuchsia-800";
+        return "bg-fuchsia-800/60";
       default:
         return "default";
     }
@@ -45,19 +45,22 @@ export default function RecipeStep({ step }: { step: RecipeStep }) {
         </ul>
       </td>
       <td className="py-2 align-top">
-        <Chip
-          size="md"
-          classNames={{
-            base: stepTypeColor(step.stepType),
-            content: "drop-shadow shadow-black text-white",
-          }}
-        >
-          {step.stepType.toLowerCase()}
-        </Chip>
-        <p className="text-black-foreground text-sm font-bold">
-          {step.duration} {step.duration === 1 ? "minute" : "minutes"}{" "}
-        </p>
         <p className="font-medium">{step.description}</p>
+        <div className="flex items-center gap-2">
+          <p className="pt-0.5 text-sm text-foreground-500">
+            {step.duration} {step.duration === 1 ? "minute" : "minutes"}{" "}
+          </p>
+          <Chip
+            variant="flat"
+            size="sm"
+            classNames={{
+              base: stepTypeColor(step.stepType),
+              content: "text-white",
+            }}
+          >
+            {step.stepType.toLowerCase()}
+          </Chip>
+        </div>
       </td>
     </tr>
   );
