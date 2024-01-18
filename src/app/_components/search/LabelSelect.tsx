@@ -24,7 +24,9 @@ export default function LabelSelect({
   function handleLabelFilter(selectedLabels: string[]) {
     const params = new URLSearchParams(searchParams);
     // reset page
-    params.get("page") ? params.set("page", "1") : params.delete("page");
+    if (params.get("page") !== "1") {
+      params.set("page", "1");
+    }
 
     selectedLabels && selectedLabels.length > 0
       ? params.set("labels", selectedLabels.join())

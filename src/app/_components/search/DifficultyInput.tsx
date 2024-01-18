@@ -24,7 +24,9 @@ export default function DifficultyInput() {
   const updateURLParams = (difficulty: number | null) => {
     const params = new URLSearchParams(searchParams);
     // reset page
-    params.get("page") ? params.set("page", "1") : params.delete("page");
+    if (params.get("page") !== "1") {
+      params.set("page", "1");
+    }
     
     if (difficulty !== null) {
       params.set("difficulty", difficulty.toString());

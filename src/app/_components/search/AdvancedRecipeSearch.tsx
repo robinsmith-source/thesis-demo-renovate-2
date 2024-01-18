@@ -30,7 +30,9 @@ export default function AdvancedRecipeSearch({
     const params = new URLSearchParams(searchParams);
 
     // reset page
-    params.get("page") ? params.set("page", "1") : params.delete("page");
+    if (params.get("page") !== "1") {
+      params.set("page", "1");
+    }
 
     name ? params.set("name", name) : params.delete("name");
     sort ? params.set("order", sort) : params.delete("order");
