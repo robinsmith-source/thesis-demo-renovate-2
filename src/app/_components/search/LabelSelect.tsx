@@ -12,7 +12,7 @@ type LabelSelectProps = {
 
 export default function LabelSelect({
   categories,
-  className = "",
+  className,
 }: LabelSelectProps) {
   const pathname = usePathname();
   const router = useRouter();
