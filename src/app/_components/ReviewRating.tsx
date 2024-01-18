@@ -1,4 +1,4 @@
-import { FaStar, FaRegStar } from "react-icons/fa6";
+import { FaRegStar, FaStar } from "react-icons/fa6";
 
 export default function ReviewRating({ rating }: { rating: number }) {
   return (
