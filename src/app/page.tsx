@@ -19,9 +19,15 @@ export default async function Home() {
   return (
     <main className="flex flex-col items-center">
       <FadeIn>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-2">
           <div className="ml-5">
-            <h1 className="text-7xl font-bold">Welcome to Goose Chef!</h1>
+            <h1 className="text-7xl font-bold">
+              Welcome to{" "}
+              <span className="to-accent bg-gradient-to-r from-primary-500 bg-clip-text text-transparent">
+                Goose Chef
+              </span>
+              !
+            </h1>
             <p className="mt-8 text-4xl font-semibold">
               The cooking website with your favourite Recipes!
             </p>
@@ -30,8 +36,7 @@ export default async function Home() {
               explore new Recipes from other Cooking-Enthusiasts!
             </p>
           </div>
-          <div className="mb-4 flex justify-center">
-            {/* Goose chef logo */}
+          <div className="flex justify-center">
             <Image
               as={NextImage}
               width={500}
@@ -48,7 +53,7 @@ export default async function Home() {
         <FadeIn direction="left">
           <div className="mb-4 text-start">
             <h2 className="text-4xl font-semibold">Featured Recipes</h2>
-            <h2 className="text-2xl font-light text-foreground-600">
+            <h2 className="text-foreground-600 text-2xl font-light">
               Here are some of our favourite Recipes!
             </h2>
           </div>
@@ -58,7 +63,7 @@ export default async function Home() {
         <FadeIn direction="left">
           <div className="mb-4 text-start">
             <h2 className="text-4xl font-semibold"> Latest Recipes </h2>
-            <h2 className="text-2xl font-light text-foreground-600">
+            <h2 className="text-foreground-600 text-2xl font-light">
               Here are some of our latest Recipes!
             </h2>
           </div>
