@@ -14,7 +14,7 @@ type urlParams = {
 };
 
 type apiParams = {
-  take?: number;
+  take: number;
   skip?: number;
   name?: string;
   difficulty?: "EASY" | "MEDIUM" | "HARD" | "EXPERT";
@@ -26,32 +26,20 @@ type apiParams = {
 const createQueryParams = (params: urlParams) => {
   const { name, labels, difficulty, order, pageSize, page } = params;
   const numericPageSize = parseInt(pageSize ?? "12");
-  const queryParameters: apiParams = { take: numericPageSize ?? 12};
-
-  if (name) queryParameters.name = name;
-  if (labels) queryParameters.labels = labels.split(",");
-  if (difficulty) {
-    const numericDifficulty = Number(difficulty);
-    switch (numericDifficulty) {
-      case 1:
-        queryParameters.difficulty = "EASY";
-        break;
-      case 2:
-        queryParameters.difficulty = "MEDIUM";
-        break;
-      case 3:
-        queryParameters.difficulty = "HARD";
-        break;
-      case 4:
-        queryParameters.difficulty = "EXPERT";
-        break;
-    }
-  }
-  if (order) queryParameters.orderBy = order;
-  const numericPage = Number(page);
-  if (numericPage) {
-    queryParameters.skip = (numericPage - 1) * (queryParameters.take ?? 0);
-  }
+  const textDifficulty = ["EASY", "MEDIUM", "HARD", "EXPERT"][
+    Number(difficulty) - 1
+  ] as "EASY" | "MEDIUM" | "HARD" | "EXPERT";
+  
+  const queryParameters: apiParams = {
+    take: numericPageSize ?? 12,
+    ...(name && { name }),
+    ...(labels && { labels: labels.split(",") }),
+    ...(difficulty && {
+      difficulty: textDifficulty,
+    }),
+    ...(order && { orderBy: order }),
+    ...(page && { skip: (Number(page) - 1) * (numericPageSize ?? 0) }),
+  };
 
   return queryParameters;
 };
@@ -61,7 +49,6 @@ export default async function Page({
 }: {
   searchParams?: urlParams;
 }) {
-  // get all categories and their labels from DB
   const categories = await api.recipeLabelCategory.getAll.query();
 
   const queryParameters = createQueryParams(searchParams ?? {});

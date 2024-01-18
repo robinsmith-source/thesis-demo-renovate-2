@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  Button,
-  Card,
-  Input,
-  Select,
-  SelectItem,
-} from "@nextui-org/react";
+import { Button, Card, Input, Select, SelectItem } from "@nextui-org/react";
 import { FaFilter, FaMagnifyingGlass } from "react-icons/fa6";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
@@ -26,26 +20,33 @@ export default function AdvancedRecipeSearch({
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const handleSearch = useDebouncedCallback(
-    (name?: string, order?: string, pageSize?: string) => {
-      const params = new URLSearchParams(searchParams);
-      params.set("page", "1");
+  const [filtersCollapsed, setFiltersCollapsed] = useState(true);
 
-      name ? params.set("name", name) : params.delete("name");
-      order ? params.set("order", order) : params.delete("order");
-      pageSize
-        ? params.set("pageSize", pageSize)
-        : params.delete("pageSize");
+  const handleSearch = ({
+    name,
+    sort,
+    size,
+  }: { name?: string; sort?: string; size?: string } = {}) => {
+    const params = new URLSearchParams(searchParams);
 
-      router.replace(`${pathname}?${params.toString()}`);
-    },
-    333,
-  ); // debounce in ms
+    // reset page
+    params.get("page") ? params.set("page", "1") : params.delete("page");
 
-  const [isCollapsed, setIsCollapsed] = useState(true);
-  const toggleCollapse = () => {
-    setIsCollapsed(!isCollapsed);
+    name ? params.set("name", name) : params.delete("name");
+    sort ? params.set("order", sort) : params.delete("order");
+    if (size) {
+      params.set("pageSize", size);
+    }
+    
+    router.replace(`${pathname}?${params.toString()}`);
   };
+
+  const handleInput = useDebouncedCallback(
+    (value: string) => {
+      handleSearch({ name: value });
+    },
+    333, // delay in ms
+  );
 
   return (
     <div className="mb-3 w-full justify-center">
@@ -56,7 +57,7 @@ export default function AdvancedRecipeSearch({
             variant="flat"
             color="secondary"
             startContent={<FaFilter />}
-            onClick={() => toggleCollapse()}
+            onClick={() => setFiltersCollapsed(!filtersCollapsed)}
           >
             Filters
           </Button>
@@ -66,15 +67,9 @@ export default function AdvancedRecipeSearch({
             defaultValue={searchParams.get("name")?.toString()}
             startContent={<FaMagnifyingGlass className="mr-1" />}
             placeholder="Search recipes"
-            onValueChange={(value: string) =>
-              handleSearch(
-                value,
-                searchParams.get("order") ?? "",
-                searchParams.get("pageSize") ?? ""
-              )
-            }
+            onValueChange={(value: string) => handleInput(value)}
           />
-          <span className="whitespace-nowrap font-extralight">Sort By</span>
+          <span className="whitespace-nowrap font-light">Sort By</span>
           <Select
             fullWidth={false}
             size="sm"
@@ -82,11 +77,7 @@ export default function AdvancedRecipeSearch({
             selectionMode="single"
             defaultSelectedKeys={searchParams.get("order") ?? "NEWEST"}
             onSelectionChange={(value) =>
-              handleSearch(
-                searchParams.get("name") ?? "",
-                Array.from(value)[0]?.toString() ?? "",
-                searchParams.get("pageSize") ?? "",
-              )
+              handleSearch({ sort: Array.from(value)[0]?.toString() ?? "" })
             }
           >
             <SelectItem key="NEWEST" value="NEWEST">
@@ -96,20 +87,14 @@ export default function AdvancedRecipeSearch({
               oldest
             </SelectItem>
           </Select>
-          <span className="whitespace-nowrap font-extralight">
-            Items per page
-          </span>
+          <span className="whitespace-nowrap font-light">Items per page</span>
           <Select
             fullWidth={false}
             size="sm"
             className="w-24"
             selectionMode="single"
             onSelectionChange={(value) =>
-              handleSearch(
-                searchParams.get("name") ?? "",
-                searchParams.get("order") ?? "",
-                Array.from(value)[0]?.toString(),
-              )
+              handleSearch({ size: Array.from(value)[0]?.toString() ?? "" })
             }
           >
             <SelectItem key="4" value="4">
@@ -127,8 +112,8 @@ export default function AdvancedRecipeSearch({
           className="mx-4 mb-2 flex w-full flex-row items-center justify-between"
           initial={{ opacity: 0, height: 0 }}
           animate={{
-            opacity: !isCollapsed ? 1 : 0,
-            height: !isCollapsed ? "auto" : 0,
+            opacity: !filtersCollapsed ? 1 : 0,
+            height: !filtersCollapsed ? "auto" : 0,
           }}
           transition={{ duration: 0.2 }}
         >
