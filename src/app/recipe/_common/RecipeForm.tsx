@@ -160,11 +160,12 @@ export default function RecipeForm({
             name="description"
             render={({ fieldState }) => (
               <Textarea
+                isRequired
                 className={"col-span-full mb-2"}
                 minRows={2}
                 label="Recipe Description"
                 placeholder="My grandma used to make this pizza for me ..."
-                {...methods.register("description", { required: false })}
+                {...methods.register("description")}
                 isInvalid={!!fieldState.error}
                 errorMessage={fieldState.error?.message}
               />
