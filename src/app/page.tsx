@@ -1,7 +1,6 @@
 import { api } from "~/trpc/server";
 import { Image } from "@nextui-org/react";
 import NextImage from "next/image";
-import SimpleRecipeSearch from "./_components/search/SimpleRecipeSearch";
 import RecipeCardsSection from "~/app/_components/RecipeCardsSection";
 
 export const dynamic = "force-dynamic";
@@ -24,9 +23,7 @@ export default async function Home() {
           className="mb-2 h-24 w-24 object-contain"
         />
       </div>
-      <div className="mb-4 w-full md:w-1/2">
-        <SimpleRecipeSearch />
-      </div>
+
       <RecipeCardsSection recipes={latestRecipes} />
     </main>
   );
