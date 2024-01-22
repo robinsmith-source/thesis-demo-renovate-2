@@ -4,6 +4,7 @@ import { FaTag } from "react-icons/fa6";
 import { Chip, Select, SelectItem, SelectSection } from "@nextui-org/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
+import { useDebouncedCallback } from "use-debounce";
 
 type LabelSelectProps = {
   categories: { name: string; RecipeLabel: { name: string; }[]; }[];
@@ -23,7 +24,7 @@ export default function LabelSelect({
   const [labelInput, setLabelInput] = useState<string[]>([]);
   const placeholder = "Select labels";
 
-  function handleLabelFilter(selectedLabels: string[]) {
+  const handleLabelFilter = useDebouncedCallback((selectedLabels: string[]) => {
     const params = new URLSearchParams(searchParams);
     // reset page
     if (params.get("page") !== "1") {
@@ -34,7 +35,7 @@ export default function LabelSelect({
       ? params.set("labels", selectedLabels.join())
       : params.delete("labels");
     router.replace(`${pathname}?${params.toString()}`);
-  }
+  }, 333);
 
   return (
     <Select

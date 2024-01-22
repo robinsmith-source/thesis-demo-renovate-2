@@ -4,6 +4,7 @@ import { useState } from "react";
 import { RiKnifeFill } from "react-icons/ri";
 import { motion } from "framer-motion";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useDebouncedCallback } from "use-debounce";
 
 export default function DifficultyInput() {
   const router = useRouter();
@@ -36,7 +37,7 @@ export default function DifficultyInput() {
     void router.replace(`${pathname}?${params.toString()}`);
   };
 
-  const handleClick = (index: number) => {
+  const handleClick = useDebouncedCallback((index: number) => {
     if (clickedValue === index) {
       setClickedValue(null);
       setHoverValue(0);
@@ -45,7 +46,8 @@ export default function DifficultyInput() {
       setClickedValue(index);
       updateURLParams(index);
     }
-  };
+  }, 333);
+  
 
   return (
     <>
