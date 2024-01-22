@@ -40,6 +40,7 @@ export default function AdvancedRecipeSearch({
     <div className="mb-3 w-full justify-center">
       <Card>
         <div className="m-2 flex flex-row items-center justify-normal space-x-2">
+          {/* large screen */}
           <Button
             variant="flat"
             color="secondary"
@@ -49,6 +50,7 @@ export default function AdvancedRecipeSearch({
           >
             <span>Filters</span>
           </Button>
+          {/* small screen */}
           <Button
             variant="flat"
             color="secondary"
