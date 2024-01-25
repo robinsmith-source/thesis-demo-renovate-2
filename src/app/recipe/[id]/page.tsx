@@ -88,9 +88,10 @@ export default async function Page({ params }: { params: { id: string } }) {
         </div>
       </PortionSizeProvider>
 
-      {session != null && (
+      {session?.user && (
         <RecipeSaveButton
           recipeId={recipe.id}
+          userId={session?.user.id}
           isSaved={recipe.savedUsers.length > 0}
         />
       )}

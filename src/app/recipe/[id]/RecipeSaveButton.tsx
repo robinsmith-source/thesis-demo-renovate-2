@@ -8,9 +8,11 @@ import { api } from "~/trpc/react";
 
 export default function RecipeSaveButton({
   recipeId,
+  userId,
   isSaved,
 }: {
   recipeId: string;
+  userId: string;
   isSaved: boolean;
 }) {
   const [savedStatus, setSavedStatus] = useState(isSaved);
@@ -20,10 +22,10 @@ export default function RecipeSaveButton({
     onSuccess: () => {
       setSavedStatus(true);
       setIsSaving(false);
-      revalidatePath(`/user/${recipeId}/saved`);
+      revalidatePath(`/user/${userId}/saved`);
     },
     onError: () => {
-      toast.error("Failed to save user");
+      toast.error("Failed to save recipe");
       setIsSaving(false);
     },
   });
@@ -32,10 +34,10 @@ export default function RecipeSaveButton({
     onSuccess: () => {
       setSavedStatus(false);
       setIsSaving(false);
-      revalidatePath(`/user/${recipeId}/saved`);
+      revalidatePath(`/user/${userId}/saved`);
     },
     onError: () => {
-      toast.error("Failed to unsave user");
+      toast.error("Failed to unsave recipe");
       setIsSaving(false);
     },
   });
