@@ -12,7 +12,9 @@ export default function RecipeCardsSection({
   return (
     <>
       {recipes.length === 0 ? (
-        <h3 className="text-warning-300">Oh no, you&apos;ll starve!</h3>
+        <section>
+          <h3 className="text-warning-300">Oh no, you&apos;ll starve!</h3>
+        </section>
       ) : (
         <section
       className={`${className} w-full place-items-center justify-center gap-8 ${
