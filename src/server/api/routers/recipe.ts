@@ -134,6 +134,77 @@ export const recipeRouter = createTRPCRouter({
       return recipes;
     }),
 
+  getRecipeCount: publicProcedure
+    .input(
+      z.object({
+        take: z.number().min(1).max(50),
+        skip: z.number().min(0).optional(),
+        name: z.string().optional(),
+        difficulty: z.enum(["EASY", "MEDIUM", "HARD", "EXPERT"]).optional(),
+        excludeRecipeId: z.string().cuid().optional(),
+        authorId: z.string().cuid().optional(),
+        tags: z.array(z.string()).optional(),
+        labels: z.array(z.string()).optional(),
+      }),
+    )
+    .query(({ ctx, input }) => {
+      function createLabelQuery(labels: string[]) {
+        return {
+          AND: labels.map((label) => ({
+            labels: {
+              some: {
+                name: label,
+              },
+            },
+          })),
+        };
+      }
+
+      return ctx.db.recipe.count({
+        where: {
+          ...(input.name && { name: { contains: input.name, mode: "insensitive" } }),
+          ...(input.difficulty && { difficulty: input.difficulty }),
+          ...(input.excludeRecipeId && { id: { not: input.excludeRecipeId } }),
+          ...(input.authorId && { authorId: input.authorId }),
+          ...(input.tags && { tags: { hasEvery: input.tags } }),
+          ...(input.labels && createLabelQuery(input.labels)),
+        },
+      });
+    }),
+
+  getFollowingFeed: protectedProcedure
+    .input(
+      z.object({
+        take: z.number().min(1).max(50),
+        skip: z.number().min(0).optional(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      return ctx.db.recipe.findMany({
+        where: {
+          author: {
+            followedBy: {
+              some: {
+                id: ctx.session.user.id,
+              },
+            },
+          },
+        },
+        select: {
+          id: true,
+          name: true,
+          difficulty: true,
+          labels: { select: { name: true } },
+          images: true,
+        },
+        take: input.take,
+        skip: input.skip ?? 0,
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+    }),
+
   create: protectedProcedure
     .input(
       z.object({
