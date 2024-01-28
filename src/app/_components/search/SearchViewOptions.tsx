@@ -64,7 +64,7 @@ export default function SearchViewOptions() {
         <Select
           fullWidth={false}
           size="sm"
-          className="w-28"
+          className="w-32"
           selectionMode="single"
           label="Sort by"
           disallowEmptySelection

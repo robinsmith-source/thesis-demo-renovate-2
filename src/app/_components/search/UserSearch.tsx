@@ -27,7 +27,7 @@ export default function UserSearch() {
   return (
     <div className="mb-5 w-full justify-center">
       <Card>
-        <div className="m-2 flex flex-row items-center justify-normal space-x-2">
+        <div className="m-2 flex flex-row items-center gap-2">
           <Input
             type="text"
             size="sm"
