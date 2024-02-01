@@ -67,7 +67,7 @@ test("Should create a shopping list from recipe page and add all ingredients", a
   await page.getByRole("button", { name: "Submit" }).click();
   await page.getByPlaceholder("Choose a shopping list").click();
   await page.getByPlaceholder("Choose a shopping list").fill("ShoppingList2");
-  await page.getByText("ShoppingList2").click();
+  await page.getByText("ShoppingList2").first().click();
 
   await page.getByLabel("Select All").locator("svg").click();
   await page
