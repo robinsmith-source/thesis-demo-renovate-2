@@ -12,7 +12,7 @@ import {
   SelectItem,
   useDisclosure,
 } from "@nextui-org/react";
-import React, { useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { api } from "~/trpc/react";
@@ -21,15 +21,10 @@ import { Controller, useForm } from "react-hook-form";
 import UniversalModal from "~/app/_components/UniversalModal";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  ShoppingListModes,
-  type ShoppingListTableProps,
-} from "~/app/lib/types";
+import { ShoppingListModes, type ShoppingListType } from "~/app/lib/types";
 import { type Ingredient } from "~/app/lib/types";
 
-export default function ShoppingListCard({
-  shoppingList,
-}: ShoppingListTableProps) {
+export default function ShoppingListCard(shoppingList: ShoppingListType) {
   const [selectedIngredients, setSelectedIngredients] = useState<Ingredient[]>(
     [],
   );

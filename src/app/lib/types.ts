@@ -1,10 +1,4 @@
-import type {
-  Recipe,
-  RecipeStep,
-  RecipeStepIngredient,
-  ShoppingList,
-  ShoppingListItem,
-} from "@prisma/client";
+import { Prisma, type RecipeStepIngredient } from "@prisma/client";
 
 export enum ShoppingListModes {
   CREATE,
@@ -12,16 +6,38 @@ export enum ShoppingListModes {
   DELETE,
 }
 
-export type ShoppingListTableProps = {
-  shoppingList: ShoppingList & {
-    items: ShoppingListItem[];
+export type ShoppingListType = Prisma.ShoppingListGetPayload<{
+  select: {
+    id: true;
+    name: true;
+    description: true;
+    authorId: true;
+    items: {
+      select: {
+        id: true;
+        name: true;
+        quantity: true;
+        unit: true;
+      };
+    };
   };
-};
+}>;
 
-export type RecipeFormValues = Recipe & {
-  steps: (RecipeStep & {
-    ingredients: RecipeStepIngredient[];
-  })[];
-};
+export type RecipeFormValues = Prisma.RecipeGetPayload<{
+  select: {
+    id: true;
+    name: true;
+    description: true;
+    difficulty: true;
+    tags: true;
+    images: true;
+    authorId: true;
+    steps: {
+      include: {
+        ingredients: true;
+      };
+    };
+  };
+}>;
 
 export type Ingredient = Omit<RecipeStepIngredient, "recipeStepId">;
