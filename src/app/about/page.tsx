@@ -5,15 +5,16 @@ import {
   CardHeader,
   Chip,
   Image,
+  Link,
 } from "@nextui-org/react";
 import NextImage from "next/image";
 
-export default function about() {
+export default function About() {
   return (
     <main className="flex flex-col items-center">
       <Card className="max-w-md p-2">
         <CardHeader>
-          <div className=" text-xl font-bold">
+          <div className="text-xl font-bold">
             That's the team behind GooseChef:
           </div>
         </CardHeader>
@@ -35,12 +36,18 @@ export default function about() {
             />
           </div>
 
-          <div className="font-semibold">
-            <p>
-              This project was made for the software development 3 class at
+          <p className="font-semibold">
+            This project was made for the
+            <Link href="https://www.hdm-stuttgart.de/block?sgname=Medieninformatik+%28Bachelor%2C+7+Semester%29&sgblockID=2573372&sgang=550033&blockname=Software-Entwicklung+3">
+              {" "}
+              software development 3 class
+            </Link>{" "}
+            at
+            <Link href="https://www.hdm-stuttgart.de/">
+              {" "}
               Hochschule der Medien Stuttgart.
-            </p>
-          </div>
+            </Link>
+          </p>
         </CardBody>
         <CardFooter>
           <Chip className="mr-5">#studentwork</Chip>
