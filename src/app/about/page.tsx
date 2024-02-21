@@ -10,9 +10,19 @@ import {
 import NextImage from "next/image";
 
 export default function About() {
+  const team = [
+    "Tobias Messner",
+    "Deniz Gazitepe",
+    "Robin Schmidt",
+    "Sabrina Turni",
+    "Elena Roller",
+  ];
+
+  const tags = ["#studentWork", "#team", "#HdM", "#aboutUs"];
+
   return (
     <main className="flex flex-col items-center">
-      <Card className="max-w-md p-2">
+      <Card className="w-full p-2 sm:max-w-md">
         <CardHeader>
           <div className="text-xl font-bold">
             That's the team behind GooseChef:
@@ -20,11 +30,11 @@ export default function About() {
         </CardHeader>
         <CardBody className="space-y-6">
           <div className="flex flex-col">
-            <span>Tobias Messner</span>
-            <span>Deniz Gazitepe</span>
-            <span>Robin Schmidt</span>
-            <span>Sabrina Turni</span>
-            <span>Elena Roller</span>
+            <ul>
+              {team.map((member, index) => (
+                <li key={index}>{member}</li>
+              ))}
+            </ul>
             <Image
               as={NextImage}
               width={300}
@@ -32,28 +42,32 @@ export default function About() {
               priority
               src="/images/GooseChef.png"
               alt="Logo"
-              className="h-120 w-120 mb-2 ml-5 flex flex-col items-center object-contain md:block"
+              className="h-120 w-100 -mt-16"
             />
           </div>
 
           <p className="font-semibold">
-            This project was made for the
-            <Link href="https://www.hdm-stuttgart.de/block?sgname=Medieninformatik+%28Bachelor%2C+7+Semester%29&sgblockID=2573372&sgang=550033&blockname=Software-Entwicklung+3">
-              {" "}
+            This project was made for the{" "}
+            <Link
+              isExternal
+              href="https://www.hdm-stuttgart.de/block?sgname=Medieninformatik+%28Bachelor%2C+7+Semester%29&sgblockID=2573372&sgang=550033&blockname=Software-Entwicklung+3"
+            >
               software development 3 class
             </Link>{" "}
-            at
-            <Link href="https://www.hdm-stuttgart.de/">
-              {" "}
+            at{" "}
+            <Link isExternal href="https://www.hdm-stuttgart.de/">
               Hochschule der Medien Stuttgart.
             </Link>
           </p>
         </CardBody>
         <CardFooter>
-          <Chip className="mr-5">#studentwork</Chip>
-          <Chip className="mr-5">#team</Chip>
-          <Chip className="mr-5">#HdM</Chip>
-          <Chip>#aboutUs</Chip>
+          <ul className="flex w-full flex-wrap justify-evenly gap-4">
+            {tags.map((tag, index) => (
+              <li key={index}>
+                <Chip>{tag}</Chip>
+              </li>
+            ))}
+          </ul>
         </CardFooter>
       </Card>
     </main>

@@ -7,7 +7,13 @@ export default function Footer() {
       <div className="flex flex-row space-x-1">
         <span className="text-lg font-medium">
           © 2024 Goose Chef |{" "}
-          <Link as={NextLink} href="/about" color="warning" className="text-lg">
+          <Link
+            as={NextLink}
+            href="/about"
+            color="foreground"
+            underline="hover"
+            className="text-lg"
+          >
             About us
           </Link>
         </span>
