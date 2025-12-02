@@ -6,7 +6,7 @@ on:
     branches: [ main ]
 jobs:
   test:
-    name: 🧪 Test
+    name: 🧪 Vitest - Test
     timeout-minutes: 15
     runs-on: ubuntu-22.04
     steps:

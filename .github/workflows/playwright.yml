@@ -7,7 +7,7 @@ on:
 jobs:
   install:
     timeout-minutes: 15
-    name: 🔍 Install
+    name: 🔍 Playwright - Install
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
@@ -49,7 +49,7 @@ jobs:
         run: npx playwright install-deps
 
   test:
-    name: 🧪 Test
+    name: 🧪 Playwright - Test
     needs: [ install ]
     timeout-minutes: 15
     runs-on: ubuntu-22.04
