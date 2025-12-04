@@ -10,7 +10,7 @@
     {
       "schedule": ["* 0-5 * * *"],
       "groupName": null,
-      "matchPackagePatterns": ["*"]
+      "matchPackageNames": ["*"]
     },
     {
       "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
